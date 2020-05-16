@@ -24,7 +24,7 @@ given to the class.
 - A link to a repository containing the code (e.g. on GitHub) with minimal comments.
 
 ## TimeLine
-The deadlines for the homework 2 are as follows:
+The deadlines for the homework 3 are as follows:
 
 - June 1st: groups are expected to upload on Beep a detailed report on the project (max 8 pages) on a prescribed Beep folder, to be communicated shortly. The reports will be made available also to the other students. Due to the GDPR regulation, please do not include in the report the names of the group components, but only the personal codes. You can also choose a name of your preference for the group, which is for now only a number (1...18).
 Important note: based on the report, a grade will be assigned based on: a) the originality of the proposed solution and b) the quality of the implementation, for a total of 8/3 (2.66) points.
