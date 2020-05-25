@@ -244,4 +244,95 @@ d.mouseDownAction = {
 
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////// connection Supercollider <--> MIDI input sw/hw //////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+MIDIClient.init;
+
+MIDIIn.connectAll;
+
+//check the available midi sources
+//MIDIClient.sources;
+
+//print the key you are pressing to check if the MIDI sw/hw works
+//MIDIdef.noteOn(\noteOn, {"pressed key: ".postln});
+
+//use this to get more infos
+/* MIDIdef.noteOn(\noteOn, {
+	arg noteNumber, vel, chan, src;
+	[noteNumber, vel, chan, src].postln;
+});*/
+
+
+~notes = Array.newClear(128);
+
+//assign only the keys you intend to use to a sample
+//selectea sample and play a key to assign it
+var selected;
+w = Window.new(name: "Drum parts mapping", bounds:Rect(100,500,400,100)).front;
+~samples = Array.newClear(3);
+
+
+
+
+
+
+
+//antonaci's code////////////////////////////////////////////////////////////////////////////////////
+(
+SynthDef("sik-goo", { |out, freq = 440, formfreq = 100, gate = 0.0, bwfreq = 800;
+	var x;
+	x = Formant.ar(SinOsc.kr(0.02, 0, 10, freq), formfreq, bwfreq);
+	x = EnvGen.kr(Env.adsr, gate, Latch.kr(gate, gate)) * x;
+	Out.ar(out, x);
+	}).add;
+)
+x = Synth("sik-goo");
+
+
+(
+~noteOn = {
+				arg src, chan, num, vel;
+				x.set(\freq, num.midicps / 4.0);
+				x.set(\gate, vel / 200 );
+				x.set(\formfreq, vel / 127 * 1000);
+			};
+MIDIIn.addFuncTo(\noteOn, ~noteOn);
+
+
+~noteOff = {
+			arg src,chan,num,vel;
+			x.set(\gate, 0.0);
+			};
+MIDIIn.addFuncTo(\noteOff, ~noteOff);
+
+
+~bend = {
+			arg src,chan,val; //(val * 0.048828125).postln;
+			x.set(\bwfreq, val * 0.048828125 );
+		};
+MIDIIn.addFuncTo(\bend, ~bend);
+)
+
+
+//cleanup
+MIDIIn.removeFuncFrom(\noteOn, ~noteOn);
+MIDIIn.removeFuncFrom(\noteOff, ~noteOff);
+MIDIIn.removeFuncFrom(\bend, ~bend);
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+MIDIdef.freeAll;
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
