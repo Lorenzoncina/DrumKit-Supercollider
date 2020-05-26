@@ -153,16 +153,14 @@ SynthDef("fm", {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 NetAddr("127.0.0.1", 57120);
-
-
-
+~n1 = NetAddr.new("127.0.0.1", 12000);
 // the bass drum is played when the square is clicked
 (
 var bass_drum;
 var r;
-var lst_syn = ['\bd','\hh','\sn','\cb','\kc','\fn'];
+var lst_syn = ['\bd','\hh','\sn','\cb','\kc','\fm'];
 
-//bass_drum = Synth(\bd);
+//h = Synth(\fm);
 
 OSCdef('OSCreceiver', {
 
@@ -173,16 +171,17 @@ OSCdef('OSCreceiver', {
 	click_stype = msg[1];
 	postln("click_stype = " + click_stype);
 	bass_drum  = Synth(lst_syn[click_stype]);
+	~colors = {rrand(0,255)}!3;
+	~n1.sendMsg('/click',~colors[0],~colors[1],~colors[2]);
 
 }, "/click");
 )
 
-{
-~n1 = NetAddr.new("127.0.0.1", 12000);
-~colors = {rrand(0,255)}!3;
-~n1.sendMsg('/test',~colors[0],~colors[1],~colors[2]);
-~colors;
-}
+
+
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

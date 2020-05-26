@@ -8,9 +8,9 @@ NetAddress myReceiverLocation; //from supercollider
 int Syn_Type;
 // add osc communicaton
 OscMessage myMessage;
-// to do : link with supercollider
+// doing : link supercollider
 int color1,color2,color3;
-
+PImage ava5;
 
 void paintSquares(int alpha) {
   noStroke();
@@ -22,7 +22,7 @@ void paintSquares(int alpha) {
   rect(width/3, 0, width/3, height/2);
   //square area 3: snare drum '\sn'
   fill(50, 128, 100, alpha);
-  rect(width*2/3, height/2, width/3, height/2);
+  rect(width*2/3, 0, width/3, height/2);
   //square 4 '\cb'
   fill(30, 150, 20, alpha);
   rect(0, height/2, width/3, height/2);
@@ -59,6 +59,7 @@ void setup() {
   myRemoteLocation = new NetAddress("127.0.0.1", 57120);
   myReceiverLocation = new NetAddress("127.0.0.1", 57130);
   Syn_Type = -1;
+  ava5 = loadImage("frog.png");
 }
 
 // -- Processing Function
@@ -67,11 +68,12 @@ void setup() {
 // draw() loops forever, until stopped
 void draw() {
   paintSquares(15);
+  image(ava5, 500, 300);
   fill(255);
   noStroke();
   ellipse(mouseX, mouseY, 30, 30);
-  fill(color1,color2,color3);
-  rect(0,0,100,100);
+  ava5 = loadImage("avatar/frog.png");
+
 }
 
 // A function to check which region is the square
@@ -104,16 +106,36 @@ void mousePressed() {
   myMessage = new OscMessage("/click");
   //base drum
   print(mouseX, mouseY);
-  //=-------------- add something for checking the square number
+  //----  add something for checking the square number
   Syn_Type = checkSquareNum(mouseX, mouseY);
+  
   myMessage.add(Syn_Type);
   // processing controller -> osc ->supercollider play syn from 0-5
   oscP5.send(myMessage, myRemoteLocation); 
   myMessage.print();
+  // receive the changed color from supercollider
+  // change the color on the clicked square
+  changeSquareColor(Syn_Type,color1,color2, color3);
+
 }
+
 void oscEvent(OscMessage anewMessage){
+  if (anewMessage.checkAddrPattern("/changeColor")==true){
   color1 = anewMessage.get(0).intValue();
   color2 = anewMessage.get(1).intValue();
   color3 = anewMessage.get(2).intValue();
   println("This is a message received from SuperCollider___________",color1,"",color2,"",color3,"");
+  }
 }
+
+void changeSquareColor(int n, int color1,int color2,int color3){
+   int[] x = { 0, width/3, width*2/3, 0, width/3, width*2/3};
+   int[] y = { 0, 0, 0, height/2, height/2, height/2};
+   fill(color1,color2,color3,100);
+   rect(x[n],y[n],width/3,height/2);
+   //change ava
+   if (n == 5){
+        ava5 = loadImage("avatar/frog1.png");
+   };
+}
+  
