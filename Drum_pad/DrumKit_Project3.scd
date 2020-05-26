@@ -64,7 +64,7 @@ SynthDef("sn", {
 ///////////////// connect supercollider with Processing ////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-NetAddr("127.0.0.1", 57120);
+NetAddr("127.0.0.1", 57110);
 
 
 
@@ -80,16 +80,16 @@ OSCdef('OSCreceiver', {
 
 	arg msg;
 	//var number_of_clicks, clicks = 0;
-	var click_type = -1;
+	var click_sound_typ = -1;
 	// from processing to choose click_type
-	click_type = msg[1];
+	click_sound_typ = msg[1];
 
 	/*postln("clicks = " + number_of_clicks);*/
-	postln("click_type = " + click_type);
+	postln("click_sound_typ = " + click_sound_typ);
 
 	//bass_drum.play;
 	//bass_drum = Synth(\sn);
-	bass_drum  = Synth(lst_syn[click_type]);
+	bass_drum  = Synth(lst_syn[click_sound_typ]);
 
 }, "/click");
 )
