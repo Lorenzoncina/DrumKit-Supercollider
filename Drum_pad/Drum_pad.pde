@@ -72,7 +72,7 @@ void draw() {
   fill(255);
   noStroke();
   ellipse(mouseX, mouseY, 30, 30);
-  ava5 = loadImage("avatar/frog.png");
+  ava5 = loadImage("frog.png");
 
 }
 
@@ -135,7 +135,7 @@ void changeSquareColor(int n, int color1,int color2,int color3){
    rect(x[n],y[n],width/3,height/2);
    //change ava
    if (n == 5){
-        ava5 = loadImage("avatar/frog1.png");
+        ava5 = loadImage("frog1.png");
    };
 }
   
