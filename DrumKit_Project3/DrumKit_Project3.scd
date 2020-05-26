@@ -101,6 +101,7 @@ SynthDef("cb", {
 // --- kick --- //
 (
 SynthDef("kc", {
+	arg amp=0.1, pan=0;
     var snd;
     snd = DC.ar(0);
     snd = snd + (SinOsc.ar(XLine.ar(1500, 800, 0.01)) * Env.perc(0.0005, 0.01, curve: \lin).ar);
@@ -108,11 +109,11 @@ SynthDef("kc", {
     snd = snd + (BPF.ar(Hasher.ar(Sweep.ar), 300, 0.9) * Env.perc(0.001, 0.02).ar);
     snd = snd + (SinOsc.ar(XLine.ar(472, 60, 0.045)) * Env.perc(0.0001, 0.3, curve: \lin).delay(0.005).ar(2));
     snd = snd.tanh;
-    Out.ar(\out.kr(0), Pan2.ar(snd, \pan.kr(0), \amp.kr(0.1)));
+    Out.ar(\out.kr(0), Pan2.ar(snd, pan, amp));
 }).add;
 )
 //uncomment ad execute the following line of code if you want to listen to the sound
-//k = Synth.new("kc");
+k = Synth.new("kc");
 
 
 // --- frequencymodulator --- //
@@ -253,26 +254,40 @@ MIDIClient.init;
 MIDIIn.connectAll;
 
 //check the available midi sources
-//MIDIClient.sources;
+MIDIClient.sources;
 
 //print the key you are pressing to check if the MIDI sw/hw works
-//MIDIdef.noteOn(\noteOn, {"pressed key: ".postln});
+MIDIdef.noteOn(\noteOn, {"pressed key: ".postln});
 
 //use this to get more infos
-/* MIDIdef.noteOn(\noteOn, {
-	arg noteNumber, vel, chan, src;
-	[noteNumber, vel, chan, src].postln;
-});*/
+(
+ MIDIdef.noteOn(\noteOn, {
+	arg vel, noteNumber, chan, src;
+	[vel, noteNumber, chan, src].postln;
+});
+)
 
 
 ~notes = Array.newClear(128);
 
+(
 //assign only the keys you intend to use to a sample
 //selectea sample and play a key to assign it
 var selected;
 w = Window.new(name: "Drum parts mapping", bounds:Rect(100,500,400,100)).front;
 ~samples = Array.newClear(3);
+)
 
+
+////////// ---- MANUALLY MAPPING A MIDI INSTRUMENT ---- /////////////
+(
+~notes[36] = "kc";
+~notes[51] = "cb";
+ MIDIdef.noteOn(\noteOn, {
+	arg vel, noteNumber, chan, src;
+	Synth.new(~notes[noteNumber], [\amp, vel.linexp(1, 127, 0.01, 0.3)]);//amp ARGUMENT SHOULD BE CONSISTENT ACROSS ALL SynthDefs
+});
+)
 
 
 
@@ -288,7 +303,7 @@ SynthDef("sik-goo", { |out, freq = 440, formfreq = 100, gate = 0.0, bwfreq = 800
 	Out.ar(out, x);
 	}).add;
 )
-x = Synth("sik-goo");
+x = Synth.new("sik-goo");
 
 
 (
