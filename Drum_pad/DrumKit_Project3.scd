@@ -17,7 +17,7 @@ SynthDef.new("bd", {
 }).add;
 
 //uncomment ad execute the following line of code if you want to listen to the sound
-//b = Synth.new("bd")
+//b = Synth.new("sn")
 
 
 
@@ -55,7 +55,7 @@ SynthDef("sn", {
 }).add;
 
 //uncomment ad execute the following line of code if you want to listen to the sound
-//n = Synth.new("sn")
+//n = Synth.new("bd")
 
 
 
@@ -64,8 +64,8 @@ SynthDef("sn", {
 ///////////////// connect supercollider with Processing ////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-NetAddr("127.0.0.1", 57110);
 
+myRemoteLocation1
 
 
 // the bass drum is played when the sqaure is clicked
@@ -80,19 +80,24 @@ OSCdef('OSCreceiver', {
 
 	arg msg;
 	//var number_of_clicks, clicks = 0;
-	var click_sound_typ = -1;
+	var click_stype = -1;
 	// from processing to choose click_type
-	click_sound_typ = msg[1];
+	click_stype = msg[1];
 
 	/*postln("clicks = " + number_of_clicks);*/
-	postln("click_sound_typ = " + click_sound_typ);
+	postln("click_stype = " + click_stype);
 
 	//bass_drum.play;
 	//bass_drum = Synth(\sn);
-	bass_drum  = Synth(lst_syn[click_sound_typ]);
+	bass_drum  = Synth(lst_syn[click_stype]);
 
 }, "/click");
 )
 
-
+{
+~n1 = NetAddr.new("127.0.0.1", 12000);
+~colors = {rrand(0,255)}!3;
+~n1.sendMsg('/test',~colors[0],~colors[1],~colors[2]);
+~colors;
+}
 
