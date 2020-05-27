@@ -178,6 +178,7 @@ SynthDef("ce", {
 )
 //uncomment ad execute the following line of code if you want to listen to the sound
 //c = Synth.new("ce");
+<<<<<<< HEAD
 
 // --- tom --- //
 
@@ -196,6 +197,8 @@ SynthDef("tom", {
 )
 //uncomment ad execute the following line of code if you want to listen to the sound
 //t = Synth.new("tom");
+=======
+>>>>>>> c455588f3d2e1ab0824995564f222860902febc2
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
