@@ -14,24 +14,14 @@ PImage ava5;
 
 void paintSquares(int alpha) {
   noStroke();
-  //square area 1: bass drum '\bd'
-  fill(50, 75, 120, alpha);
-  rect(0, 0, width/3, height/2);
-  //other: 2 '\hh'
-  fill(250, 180, 100, alpha);
-  rect(width/3, 0, width/3, height/2);
-  //square area 3: snare drum '\sn'
-  fill(50, 128, 100, alpha);
-  rect(width*2/3, 0, width/3, height/2);
-  //square 4 '\cb'
-  fill(30, 150, 20, alpha);
-  rect(0, height/2, width/3, height/2);
-  //square 5 '\kc'
-  fill(90, 12, 120, alpha);
-  rect(width/3, height/2, width/3, height/2);
-  //square 6 '\fm'
-  fill(140, 80, 45, alpha);
-  rect(width*2/3, height/2, width/3, height/2);
+  // list of sound {\bd,\hh,\sn,\cb,\kc,\fm}
+  color[] s_clr = {#4B6886,#61606D,#CC6600,#25A162,#C5272E,#22B8E7};
+  for(int i = 0; i<6;i++){
+    fill(s_clr[i], alpha);
+    rect(i % 3 * (width/3), i % 2 * (height/2) , width/3, height/2);
+  }
+  
+  
 }
 
 void showPressShadow(int x, int y) {
