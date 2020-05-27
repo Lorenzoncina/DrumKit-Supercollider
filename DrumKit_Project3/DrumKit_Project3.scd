@@ -51,15 +51,17 @@ SynthDef("hh", {
 // --- snare drum --- //
 
 (
-SynthDef("sn", {
-    arg startPitch = 7000, endPitch=294, clickLevel=0.11299884319305, pitchRel = 0.03270231127739, noiseLevel=0.75628386735916, noiseRel= 0.40486946344376;
-    var pitchEnv = EnvGen.ar(Env([startPitch,410,endPitch],[0.005,0.01], curve:\exp));
-    var clickOsc = SinOsc.ar(pitchEnv);
-    var clickEnv = EnvGen.ar(Env.perc(0.001, pitchRel))*clickLevel;
-    var noiseOsc = PinkNoise.ar();
-    var noiseEnv = EnvGen.ar(Env.perc(0.01, noiseRel), doneAction: 2)*noiseLevel;
-    var snd = clickOsc *clickEnv + noiseOsc * noiseEnv;
-    Out.ar(0,Pan2.ar(snd, 0, 1));
+SynthDef("sn", {arg out = 0, amp = 0.1, sinfreq = 180, att = 0.01, rel = 0.2, ffreq = 2000, pan = 0;
+	var env, snd1, snd2, sum;
+	env = Env.perc(att, rel, amp).kr(doneAction: 2);
+	snd1 = HPF.ar(
+		in: WhiteNoise.ar,
+		freq: ffreq,
+		mul: env
+	);
+	snd2 = SinOsc.ar(freq: sinfreq, mul: env);
+	sum = snd1 + snd2;
+	Out.ar(out, Pan2.ar(sum, pan));
 }).add;
 )
 
@@ -139,6 +141,7 @@ SynthDef("fm", {
 //f = Synth.new("fm");
 
 // --- clap_electro --- //
+
 ( // MIRIAM [with this sound I would change (with the knob) amplitude and changing value (like 600 instead of 7600, lower values for the low pass filtering) makes a good  effect]
 SynthDef("ce", {
     |out = 0, amp = 0.5, pan = 0, dur = 1, value = 7600|
@@ -173,6 +176,26 @@ SynthDef("ce", {
     Out.ar(out, Pan2.ar(snd,pan,amp));
 }).add;
 )
+//uncomment ad execute the following line of code if you want to listen to the sound
+//c = Synth.new("ce");
+
+// --- tom --- //
+
+(
+SynthDef("tom", {
+    arg startPitch = 1000, endPitch=60, clickLevel=0.7, pitchRel = 0.11, noiseLevel=1, noiseRel= 0.3;
+    var pitchEnv = EnvGen.ar(Env.perc(0.01, pitchRel));
+
+    var clickOsc = SinOsc.ar(pitchEnv*(startPitch-endPitch)+endPitch);
+    var clickEnv = EnvGen.ar(Env.perc(0.001, pitchRel))*clickLevel;
+    var noiseOsc = PinkNoise.ar();
+    var noiseEnv = EnvGen.ar(Env.perc(0.01, noiseRel))*noiseLevel;
+    var snd =  noiseOsc * noiseEnv +clickOsc *clickEnv;
+    Out.ar(0,Pan2.ar(snd, 0, 1));
+}).add;
+)
+//uncomment ad execute the following line of code if you want to listen to the sound
+//t = Synth.new("tom");
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
