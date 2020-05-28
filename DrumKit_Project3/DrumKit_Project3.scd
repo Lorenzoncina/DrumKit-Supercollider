@@ -115,7 +115,7 @@ SynthDef("kc", {
 }).add;
 )
 //uncomment ad execute the following line of code if you want to listen to the sound
-k = Synth.new("kc");
+//k = Synth.new("kc");
 
 
 // --- frequencymodulator --- //
@@ -230,10 +230,10 @@ OSCdef('OSCreceiver', {
 
 	number_of_clicks = msg[1];
 
-	postln("clicks = " + number_of_clicks);
+	postln("clicks = " + number_of_clicks); //this should be replaced with "the drum kit is playing x" where x is the synth
 
 	//bass_drum.play;
-	bass_drum = Synth(\bd);
+	bass_drum = Synth(\bd); //the gui must be able to send a reference to the synth that is playing, not just the bass drum
 
 }, "/click");
 )
@@ -251,7 +251,9 @@ OSCdef('OSCreceiver', {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 (
-w = Window.new(name: "DRUM KIT", bounds:Rect(100,500,400,100)).front;
+var volume_slider, a_knobs, b_knobs, c_knobs, d_knobs ;
+~hit_hat;
+w = Window.new(name: "DRUM KIT", bounds:Rect(100,300,400,400)).front;
 a = Button.new(w,Rect(10,10,80,80));
 a.string = "bass drum";
 b = Button.new(w,Rect(110,10,80,80));
@@ -262,32 +264,67 @@ d = Button.new(w,Rect(310,10,80,80));
 d.string = "cowbell";
 
 
+//use knobs to modify synth values, map 0->1 to min_value->max_value
+//add a name to the knobs
+
 a.mouseDownAction = {
 	var bass_drum;
 	bass_drum = Synth(\bd);
 };
 
+a_knobs = Array.newClear(4); //number of paramters
+a_knobs[0] = Knob(w,Rect(15,100,80,80));
+a_knobs[1] = Knob(w,Rect(15,200,80,80));
+a_knobs[2] = Knob(w,Rect(15,300,80,80));
+a_knobs[3] = Knob(w,Rect(15,400,80,80));
+
 
 b.mouseDownAction = {
-	var hit_hat;
-	hit_hat = Synth(\hh);
+
+	~hit_hat = Synth(\hh);
 };
+
+b_knobs = Array.newClear(4);
+b_knobs[0] = Knob(w,Rect(115,100,80,80));
+b_knobs[0].action = {~hit_hat.set(\noiseRel,b_knobs[0].value*100)};
+b_knobs[1] = Knob(w,Rect(115,200,80,80));
+b_knobs[2] = Knob(w,Rect(115,300,80,80));
+b_knobs[3] = Knob(w,Rect(115,400,80,80));
+
 
 
 c.mouseDownAction = {
 	var snare;
 	snare = Synth(\sn);
 };
+c_knobs = Array.newClear(4);
+c_knobs[0] = Knob(w,Rect(215,100,80,80));
+c_knobs[1] = Knob(w,Rect(215,200,80,80));
+c_knobs[2] = Knob(w,Rect(215,300,80,80));
+c_knobs[3] = Knob(w,Rect(215,400,80,80));
 
 
 d.mouseDownAction = {
 	var cowbell;
 	cowbell = Synth(\cb);
 };
+d_knobs = Array.newClear(4);
+d_knobs[0] = Knob(w,Rect(315,100,80,80));
+d_knobs[1] = Knob(w,Rect(315,200,80,80));
+d_knobs[2] = Knob(w,Rect(315,300,80,80));
+d_knobs[3] = Knob(w,Rect(415,400,80,80));
 
+//volume_slider = Slider(w,Rect(10,100,40,180));//use sliders to control the output volume
+
+//w.onClose= {sound.free;};
 )
 
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -299,6 +336,18 @@ d.mouseDownAction = {
 
 
 
+//is the JUCE midi connection ready?
+
+
+
+MIDIClient.init;
+MIDIClient.destinations;
+var midiJUCE = MIDIOut.new(0);
+
+midiJUCE.postln;
+
+
+//bind juce with sc
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -333,7 +382,7 @@ MIDIdef.noteOn(\noteOn, {"pressed key: ".postln});
 
 (
 //assign only the keys you intend to use to a sample
-//selectea sample and play a key to assign it
+//selecte a sample and play a key to assign it
 var selected;
 w = Window.new(name: "Drum parts mapping", bounds:Rect(100,500,400,100)).front;
 ~samples = Array.newClear(3);
@@ -342,6 +391,7 @@ w = Window.new(name: "Drum parts mapping", bounds:Rect(100,500,400,100)).front;
 
 ////////// ---- MANUALLY MAPPING A MIDI INSTRUMENT ---- /////////////
 (
+//this assignment should be left to the user. it should go like this "press any key to assign it to the bass drum" and then "press any key to assign it to the snare"
 ~notes[36] = "kc";
 ~notes[51] = "cb";
  MIDIdef.noteOn(\noteOn, {
