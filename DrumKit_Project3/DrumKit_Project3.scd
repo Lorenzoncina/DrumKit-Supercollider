@@ -178,7 +178,7 @@ SynthDef("ce", {
 )
 //uncomment ad execute the following line of code if you want to listen to the sound
 //c = Synth.new("ce");
-<<<<<<< HEAD
+
 
 // --- tom --- //
 
