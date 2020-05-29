@@ -12,7 +12,7 @@
 MainComponent::MainComponent()
 {
     setSize (600, 450);
-
+	sender.connect("127.0.0.1", 57120);
 	//Buttons
 	addAndMakeVisible(butt1);
 	addAndMakeVisible(butt2);
@@ -28,12 +28,17 @@ MainComponent::MainComponent()
 	vol1.setValue(0.5);
 	vol1.setSliderStyle(Slider::SliderStyle::Rotary);
 	vol1.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0,0);
+	vol1.addListener(this);
+	vol1.synth = "sn";
 	addAndMakeVisible(vol1);
+	
 
 	vol2.setRange(0.0, 1.0, 0.01);
 	vol2.setValue(0.5);
 	vol2.setSliderStyle(Slider::SliderStyle::Rotary);
 	vol2.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+	vol2.addListener(this);
+	vol2.synth = "hh";
 	addAndMakeVisible(vol2);
 
 	vol3.setRange(0.0, 1.0, 0.01);
@@ -117,6 +122,12 @@ MainComponent::MainComponent()
 	tempoLabel.setText("Tempo", dontSendNotification);
 	addAndMakeVisible(tempoLabel);
 
+	instrumentSelector.setRange(1.0, 8.0, 1.0);
+	instrumentSelector.setSliderStyle(Slider::SliderStyle::Rotary);
+	instrumentSelector.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+	addAndMakeVisible(instrumentSelector);
+
+
 }
 
 MainComponent::~MainComponent()
@@ -186,4 +197,20 @@ void MainComponent::resized()
 	Rectangle<int> tempoSliderRect = center1.removeFromLeft(getWidth() / 7);
 	tempoSlider.setBounds(tempoSliderRect);
 	tempoLabel.setBounds(tempoSliderRect.removeFromBottom(getHeight()/3.5));
+
+	Rectangle<int> instrumentSelectorRect = up.removeFromLeft(getWidth() / 7);
+	instrumentSelector.setBounds(instrumentSelectorRect);
+}
+
+
+void MainComponent::sendVolume(MySlider *slider)
+{	 
+	float volume = slider->getValue();
+	sender.send("/amp" , volume, slider->synth);
+}
+
+void MainComponent::sliderValueChanged(Slider *slider)
+{	
+	//sendVolume(slider->getValue(), slider->synth );
+	sendVolume((MySlider*)slider);
 }
