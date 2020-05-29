@@ -221,8 +221,6 @@ NetAddr("127.0.0.1", 57120);
 (
 var bass_drum;
 
-//bass_drum = Synth(\bd);
-
 OSCdef('OSCreceiver', {
 
 	arg msg;
@@ -251,72 +249,148 @@ OSCdef('OSCreceiver', {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 (
-var volume_slider, a_knobs, b_knobs, c_knobs, d_knobs ;
-~hit_hat;
-w = Window.new(name: "DRUM KIT", bounds:Rect(100,300,400,400)).front;
-a = Button.new(w,Rect(10,10,80,80));
-a.string = "bass drum";
-b = Button.new(w,Rect(110,10,80,80));
-b.string = "hi-hat";
-c = Button.new(w,Rect(210,10,80,80));
-c.string = "snare";
-d = Button.new(w,Rect(310,10,80,80));
-d.string = "cowbell";
+var bd, hh, sn, cb, kc, fm, ce, tom, t, min, max;
+var bd_knobs, hh_knobs, sn_knobs, cb_knobs, kc_knobs, fm_knobs, ce_knobs, tom_knobs;
+~l1_temp; ~start_temp; ~q_temp; ~ffreq_hh_temp; ~amp_hh_temp; ~sinfreq_temp; ~ffreq_sn_temp; ~amp_sn_temp;
+~sinfreq_temp; ~fundfreq_temp; ~amp_cb_temp; ~start_temp; ~amp_cb_temp; ~fc_temp; ~amp_fm_temp; ~value_temp;
+~amp_clap_e_temp; ~pitchRel_temp; ~startPitch_temp;
+w = Window.new(name: "DRUM KIT", bounds:Rect(100,300,800,400)).front;
+bd = Button.new(w,Rect(10,10,80,80));
+bd.string = "bass drum";
+hh = Button.new(w,Rect(110,10,80,80));
+hh.string = "hi-hat";
+sn = Button.new(w,Rect(210,10,80,80));
+sn.string = "snare";
+cb = Button.new(w,Rect(310,10,80,80));
+cb.string = "cowbell";
+kc = Button.new(w,Rect(410,10,80,80));
+kc.string = "kick";
+fm = Button.new(w,Rect(510,10,80,80));
+fm.string = "fm";
+ce = Button.new(w,Rect(610,10,80,80));
+ce.string = "clap electro";
+tom = Button.new(w,Rect(710,10,80,80));
+tom.string = "tom";
 
+
+//t = StaticText(w,Rect(100,10,90,30)).string_("Button released"); //okay i found the text boxes, tomorrow i'll fix them
+//i still have to add "press a key ti assiciate it with a synth"
 
 //use knobs to modify synth values, map 0->1 to min_value->max_value
-//add a name to the knobs
 
-a.mouseDownAction = {
+bd.mouseDownAction = {
 	var bass_drum;
-	bass_drum = Synth(\bd);
+	bass_drum = Synth(\bd, [\l1,~l1_temp, \start, ~start_temp]);
+};
+bd_knobs = Array.newClear(2); //number of paramters = number of knobs
+bd_knobs[0] = Knob(w,Rect(15,100,80,80));
+bd_knobs[0].action = {~l1_temp = bd_knobs[0].linlin(0, 1, min, max)}; // set min, max
+bd_knobs[1] = Knob(w,Rect(15,200,80,80));
+bd_knobs[1].action = {~start_temp = bd_knobs[1].linlin(0, 1, min, max)};
+
+
+
+
+
+hh.mouseDownAction = {
+	var hit_hat;
+	hit_hat = Synth(\hh, [\q, ~q_temp, \ffreq, ~ffreq_hh_temp, \amp, ~amp_hh_temp]);
 };
 
-a_knobs = Array.newClear(4); //number of paramters
-a_knobs[0] = Knob(w,Rect(15,100,80,80));
-a_knobs[1] = Knob(w,Rect(15,200,80,80));
-a_knobs[2] = Knob(w,Rect(15,300,80,80));
-a_knobs[3] = Knob(w,Rect(15,400,80,80));
-
-
-b.mouseDownAction = {
-
-	~hit_hat = Synth(\hh);
-};
-
-b_knobs = Array.newClear(4);
-b_knobs[0] = Knob(w,Rect(115,100,80,80));
-b_knobs[0].action = {~hit_hat.set(\noiseRel,b_knobs[0].value*100)};
-b_knobs[1] = Knob(w,Rect(115,200,80,80));
-b_knobs[2] = Knob(w,Rect(115,300,80,80));
-b_knobs[3] = Knob(w,Rect(115,400,80,80));
+hh_knobs = Array.newClear(3);
+hh_knobs[0] = Knob(w,Rect(115,100,80,80));
+hh_knobs[0].action = {~q_temp = hh_knobs[0].linlin(0, 1, min, max)};
+hh_knobs[1] = Knob(w,Rect(115,200,80,80));
+hh_knobs[1].action = {~ffreq_temp = hh_knobs[1].linlin(0, 1, min, max)};
+hh_knobs[2] = Knob(w,Rect(115,300,80,80));
+hh_knobs[2].action = {~amp_temp = hh_knobs[2].linlin(0, 1, min, max)};
 
 
 
-c.mouseDownAction = {
+
+
+sn.mouseDownAction = {
 	var snare;
-	snare = Synth(\sn);
+	snare = Synth(\sn, [\sinfreq, ~sinfreq_temp, \ffreq, ~ffreq_sn_temp, \amp, ~amp_sn_temp ]);
 };
-c_knobs = Array.newClear(4);
-c_knobs[0] = Knob(w,Rect(215,100,80,80));
-c_knobs[1] = Knob(w,Rect(215,200,80,80));
-c_knobs[2] = Knob(w,Rect(215,300,80,80));
-c_knobs[3] = Knob(w,Rect(215,400,80,80));
+sn_knobs = Array.newClear(3);
+sn_knobs[0] = Knob(w,Rect(215,100,80,80));
+sn_knobs[0].action = {~q_temp = sn_knobs[0].linlin(0, 1, min, max)};
+sn_knobs[1] = Knob(w,Rect(215,200,80,80));
+sn_knobs[1].action = {~ffreq_sn_temp = sn_knobs[1].linlin(0, 1, min, max)};
+sn_knobs[2] = Knob(w,Rect(215,300,80,80));
+sn_knobs[2].action = {~amp_sn_temp = sn_knobs[2].linlin(0, 1, min, max)};
 
 
-d.mouseDownAction = {
+
+
+
+cb.mouseDownAction = {
 	var cowbell;
-	cowbell = Synth(\cb);
+	cowbell = Synth(\cb, [\fundfreq, ~fundfreq_temp, \amp, ~amp_cb_temp]);
 };
-d_knobs = Array.newClear(4);
-d_knobs[0] = Knob(w,Rect(315,100,80,80));
-d_knobs[1] = Knob(w,Rect(315,200,80,80));
-d_knobs[2] = Knob(w,Rect(315,300,80,80));
-d_knobs[3] = Knob(w,Rect(415,400,80,80));
+cb_knobs = Array.newClear(2);
+cb_knobs[0] = Knob(w,Rect(315,100,80,80));
+cb_knobs[0].action = {~fundfreq_temp = cb_knobs[0].linlin(0, 1, min, max)};
+cb_knobs[1] = Knob(w,Rect(315,200,80,80));
+cb_knobs[1].action = {~amp_cb_temp = cb_knobs[1].linlin(0, 1, min, max)};
 
-//volume_slider = Slider(w,Rect(10,100,40,180));//use sliders to control the output volume
 
-//w.onClose= {sound.free;};
+
+
+
+kc.mouseDownAction = {
+	var kick;
+	kick = Synth(\kc, [\start, ~start_temp, \amp, ~amp_cb_temp]);
+};
+kc_knobs = Array.newClear(2);
+kc_knobs[0] = Knob(w,Rect(415,100,80,80));
+kc_knobs[0].action = {~start_temp = kc_knobs[0].linlin(0, 1, min, max)};
+kc_knobs[1] = Knob(w,Rect(415,200,80,80));
+kc_knobs[1].action = {~amp_cb_temp = kc_knobs[1].linlin(0, 1, min, max)};
+
+
+
+
+
+fm.mouseDownAction = {
+	var fm;
+	fm = Synth(\fm, [\fc, ~fc_temp, \amp, ~amp_fm_temp]);
+};
+fm_knobs = Array.newClear(2);
+fm_knobs[0] = Knob(w,Rect(515,100,80,80));
+fm_knobs[0].action = {~fc_temp = fm_knobs[0].linlin(0, 1, min, max)};
+fm_knobs[1] = Knob(w,Rect(515,200,80,80));
+fm_knobs[1].action = {~amp_fm_temp = fm_knobs[1].linlin(0, 1, min, max)};
+
+
+
+
+
+ce.mouseDownAction = {
+	var clap_e;
+	clap_e = Synth(\ce, [\value, ~value_temp, \amp, ~amp_clap_e_temp]);
+};
+ce_knobs = Array.newClear(2);
+ce_knobs[0] = Knob(w,Rect(615,100,80,80));
+ce_knobs[0].action = {~value_temp = ce_knobs[0].linlin(0, 1, min, max)};
+ce_knobs[1] = Knob(w,Rect(615,200,80,80));
+ce_knobs[1].action = {~amp_clap_e_temp = ce_knobs[1].linlin(0, 1, min, max)};
+
+
+
+
+tom.mouseDownAction = {
+	var tom;
+	tom = Synth(\tom, [\pitchRel, ~pitchRel_temp, \startPitch, ~startPitch_temp]);
+};
+tom_knobs = Array.newClear(2);
+tom_knobs[0] = Knob(w,Rect(715,100,80,80));
+tom_knobs[0].action = {~pitchRel_temp = tom_knobs[0].linlin(0, 1, min, max)};
+tom_knobs[1] = Knob(w,Rect(715,200,80,80));
+tom_knobs[1].action = {~pitchRel_temp = tom_knobs[1].linlin(0, 1, min, max)};
+
+
 )
 
 
