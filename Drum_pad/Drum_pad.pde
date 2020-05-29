@@ -4,6 +4,7 @@ import netP5.*;
 
 // to generate multiple particle system
 ArrayList<ParticleSystem> systems;
+
 //osc communication
 OscP5 oscP5;
 //color object
@@ -16,7 +17,8 @@ int Syn_Type;
 OscMessage myMessage;
 // doing : link supercollider
 int color1,color2,color3;
-PImage ava5;
+PImage ava6;
+PImage bg; // load background image
 
 void paintSquares(int alpha) {
   noStroke();
@@ -45,13 +47,20 @@ void showPressShadow(int x, int y) {
 // setup(): initialize the window, runs once
 void setup() {
   size(750, 500);
-  background(255);
+  //use background img instead, no need color
+  //background(255);
+  // paint the interactive square first
   paintSquares(100);
+  bg = loadImage("pic/background.jpg");
+  background(bg);
+  // set ava6
+  ava6 = loadImage("pic/avatar6.png");
+  
   oscP5 = new OscP5(this, 12000);
   myRemoteLocation = new NetAddress("127.0.0.1", 57120);
   myReceiverLocation = new NetAddress("127.0.0.1", 57130);
   Syn_Type = -1;
-  ava5 = loadImage("frog.png");
+  //ava6 = loadImage("pic/avatar6.png");
   systems = new ArrayList<ParticleSystem>();// add new ps
 }
 
@@ -60,12 +69,17 @@ void setup() {
 // All Processing programs update the screen at the end of draw()
 // draw() loops forever, until stopped
 void draw() {
+  // load background first
+  background(bg);
+  //paint square back
   paintSquares(15);
-  image(ava5, 500, 300);
+  // set avatar back
+  ava6 = loadImage("pic/avatar6.png");
+  // show avatar img
+  image(ava6, 550, 300);
   fill(255);
   noStroke();
-  ellipse(mouseX, mouseY, 30, 30);
-  ava5 = loadImage("frog.png");
+  ellipse(mouseX, mouseY, 10, 10);
   // add particle system
     if (systems.isEmpty()) {
     fill(255);
@@ -145,7 +159,8 @@ void changeSquareColor(int n, int color1,int color2,int color3){
    rect(x[n],y[n],width/3,height/2);
    //change ava
    if (n == 5){
-        ava5 = loadImage("frog1.png");
+        ava6 = loadImage("pic/avatar6c.png");
+        image(ava6, 550, 300);
    };
 }
   
@@ -255,7 +270,7 @@ class Particle {
 
   Particle(PVector l) {
     acceleration = new PVector(0, 0.05);//0.05
-    velocity = new PVector(random(-1, 1), random(-2, 0));
+    velocity = new PVector(random(-2, 2), random(-2, 0));
     position = l.copy();
     lifespan = 255.0;
   }
@@ -277,7 +292,6 @@ class Particle {
     stroke(#F9BC45, lifespan-60); //darker stroke
     fill(#FAF184, lifespan-60);// brighter filling color
     ellipse(position.x, position.y, 5, 5);
-    // change to image
   }
 
   // Is the particle still useful?
