@@ -169,15 +169,18 @@ OSCdef('OSCreceiver', {
 	var click_stype = -1;
 	// from processing listener -> osc -> synth
 	click_stype = msg[1];
-	postln("click_stype = " + click_stype);
+	postln("Received click_stype = " + click_stype);
 	bass_drum  = Synth(lst_syn[click_stype]);
+	// send osc message back to processing
+	// change color and return back to p5
 	~colors = {rrand(0,255)}!3;
-	~n1.sendMsg('/click',~colors[0],~colors[1],~colors[2]);
-
+	~n1.sendMsg('/changeColor',~colors[0],~colors[1],~colors[2]);
+	~n1.sendMsg('/sendSoundDes',bass_drum);
 }, "/click");
 )
 
-
+var bass_drum = Synth(\fm);
+bass_drum.defName
 
 
 
