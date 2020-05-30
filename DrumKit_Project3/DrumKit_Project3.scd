@@ -142,7 +142,7 @@ SynthDef("fm", {
 
 // --- clap_electro --- //
 
-( // MIRIAM [with this sound I would change (with the knob) amplitude and changing value (like 600 instead of 7600, lower values for the low pass filtering) makes a good  effect]
+( 
 SynthDef("ce", {
     |out = 0, amp = 0.5, pan = 0, dur = 1, value = 7600|
     var env1, env2, snd, noise1, noise2;
