@@ -298,17 +298,17 @@ OSCdef('Osc2',{
 OSCdef(\volume,{
 	arg msg, time, addr, port;
 	var vol, synth, x;
-	vol = msg[1].linexp(0, 1, 0.01, 0.6);
+	vol = msg[1];
 	synth = msg[2];
 	switch(synth,
-		\bd, {~amp_bd_temp = vol;},
-		\hh, {~amp_hh_temp = vol;},
-		\sn, {~amp_sn_temp = vol;},
-		\cb, {~amp_cb_temp = vol;},
-		\kc, {~amp_kc_temp = vol;},
-		\fm, {~amp_fm_temp = vol;},
-		\ce, {~amp_clap_e_temp = vol;},
-		\tom, {~amp_tom_temp = vol;}
+		\bd, {~amp_bd_temp = vol.linexp(0, 1, 0.01, 1);},
+		\hh, {~amp_hh_temp = vol.linexp(0, 1, 0.01, 3);},
+		\sn, {~amp_sn_temp = vol.linexp(0, 1, 0.01, 0.7);},
+		\cb, {~amp_cb_temp = vol.linexp(0, 1, 0.01, 3);},
+		\kc, {~amp_kc_temp = vol.linexp(0, 1, 0.01, 1.5);},
+		\fm, {~amp_fm_temp = vol.linexp(0, 1, 0.01, 3);},
+		\ce, {~amp_clap_e_temp = vol.linexp(0, 1, 0.01, 3.5);},
+		\tom, {~amp_tom_temp = vol.linexp(0, 1, 0.01, 3);}
 	)
 },
 '/amp'
@@ -322,7 +322,7 @@ OSCdef(\volume,{
 
 
 s.plotTree;
-
+s.meter;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////// Supercollider <--> GUI ///////////////////////////////////////////////////////////////////
@@ -381,7 +381,7 @@ hh_knobs[0].action = {~q_temp = hh_knobs[0].value.linlin(0, 1, 0, 5)}; //changes
 hh_knobs[1] = Knob(w,Rect(115,200,80,80));
 hh_knobs[1].action = {~ffreq_hh_temp = hh_knobs[1].value.linlin(0, 1, 100, 15000)};
 hh_knobs[2] = Knob(w,Rect(115,300,80,80));
-hh_knobs[2].action = {~amp_hh_temp = hh_knobs[2].value.linexp(0, 1, 0, 3)};
+hh_knobs[2].action = {~amp_hh_temp = hh_knobs[2].value.linexp(0, 1, 0.01, 3)};
 
 
 
@@ -397,7 +397,7 @@ sn_knobs[0].action = {~sinfreq_temp = sn_knobs[0].value.linlin(0, 1, 0, 1000)};
 sn_knobs[1] = Knob(w,Rect(215,200,80,80));
 sn_knobs[1].action = {~ffreq_sn_temp = sn_knobs[1].value.linlin(0, 1, 100, 5000)};
 sn_knobs[2] = Knob(w,Rect(215,300,80,80));
-sn_knobs[2].action = {~amp_sn_temp = sn_knobs[2].value.linexp(0, 1, 0, 2)};
+sn_knobs[2].action = {~amp_sn_temp = sn_knobs[2].value.linexp(0, 1, 0.01, 2)};
 
 
 
