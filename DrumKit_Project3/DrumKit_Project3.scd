@@ -214,27 +214,78 @@ SynthDef("tom", {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 NetAddr("127.0.0.1", 57120);
-
+~n1 = NetAddr.new("127.0.0.1", 12000);
 
 
 // the bass drum is played when the square is clicked
 (
 var bass_drum;
-
+var r;
+var lst_syn = ['\bd','\hh','\sn','\cb','\kc','\fm'];
 OSCdef('OSCreceiver', {
 
 	arg msg;
-	var number_of_clicks, clicks = 0;
-
-	number_of_clicks = msg[1];
-
-	postln("clicks = " + number_of_clicks); //this should be replaced with "the drum kit is playing x" where x is the synth
-
-	//bass_drum.play;
-	bass_drum = Synth(\bd); //the gui must be able to send a reference to the synth that is playing, not just the bass drum
-
+	//var number_of_clicks, clicks = 0;
+	var click_stype = -1;
+	// from processing listener -> osc -> synth
+	click_stype = msg[1];
+	postln("Received click_stype = " + click_stype);
+	bass_drum  = Synth(lst_syn[click_stype]);
+	// send osc message back to processing
+	// change color and return back to p5
+	~colors = {rrand(0,255)}!3;
+	~n1.sendMsg('/changeColor',~colors[0],~colors[1],~colors[2]);
+	~n1.sendMsg('/sendSoundDes',bass_drum);
 }, "/click");
 )
+
+// -----start of motion OSC receiver from iphone, using Syntien
+// represent right hand stick,iphone 1
+(
+// this is the right hand of the drum stick
+var drum;
+var lst_syn = ['\bd','\hh','\sn','\cb','\kc','\fm','\ce','\tom'];
+OSCdef('Osc1',{
+	// prevent multiple stroke
+	arg msg;
+	x = msg[1];//acceleration on x axis
+	y = msg[2];//y
+	z = msg[3];//z
+	if((x <= -15 )&& (y >= 15 )&& (z >= 15 )){ drum  = Synth(lst_syn[0])};
+	if((x <= -15 )&& (y <= -15 )&& (z >= 15 )){ drum  = Synth(lst_syn[1])};
+	if((x <= -15 )&& (y >= 15 )&& (z <= -15)){ drum  = Synth(lst_syn[2])};
+	if((x <= -15 )&& (y <= -15 )&& (z <= -15)){ drum  = Synth(lst_syn[3])};
+	if((x >= 15 )&& (y >= 15 )&& (z >= 15)){ drum  = Synth(lst_syn[4])};
+	if((x >= 15 )&& (y >= 15 )&& (z <= -15)){ drum  = Synth(lst_syn[5])};
+	if((x >= 15 )&& (y <= -15) && (z >= 15)){ drum  = Synth(lst_syn[6])};
+	if((x >= 15) && (y <= -15) && (z <= -15)){ drum  = Synth(lst_syn[7])};
+},"/accel/1");
+)
+
+(
+// this is the right hand of the drum stick,iphone 2
+var drum;
+var lst_syn = ['\bd','\hh','\sn','\cb','\kc','\fm','\ce','\tom'];
+OSCdef('Osc2',{
+	// prevent multiple stroke
+	arg msg;
+	x = msg[1];//acceleration on x axis
+	y = msg[2];//y
+	z = msg[3];//z
+	postln("Received:"+x,y,z);
+	if((x >= 5) && (y >= 5) && (z >= 5) ){ drum  = Synth(lst_syn[0])};
+	if((x >= 5) && (y <= -5) && (z >= 5) ){ drum  = Synth(lst_syn[1])};
+	if((x >= 5) && (y >= 5) && (z <= -5)){ drum  = Synth(lst_syn[2])};
+	if((x >= 5) && (y <= -5) && (z <= -5)){ drum  = Synth(lst_syn[3])};
+	if((x <= -5) && (y >= 5) && (z >= 5)){ drum  = Synth(lst_syn[4])};
+	if((x <= -5) && (y >= 5) && (z <= -5)){ drum  = Synth(lst_syn[5])};
+	if((x <= -5) && (y <= -5) && (z >= 5)){ drum  = Synth(lst_syn[6])};
+	if((x <= -5) && (y <= -5) && (z <= -5)){ drum  = Synth(lst_syn[7])};
+},"/accel/2");
+)
+
+
+
 
 //--------- JUCE--->SC OSC COMMUNICATION -------/////
 /////////////////////////////////////////////////////
