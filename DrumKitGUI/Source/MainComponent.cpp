@@ -139,6 +139,16 @@ MainComponent::MainComponent()
 	instrumentSelector.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 	addAndMakeVisible(instrumentSelector);
 
+	addAndMakeVisible(slid9);
+	slid9.setSliderStyle(Slider::SliderStyle::Rotary);
+	slid9.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+	addAndMakeVisible(slid10);
+	slid10.setSliderStyle(Slider::SliderStyle::Rotary);
+	slid10.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+	addAndMakeVisible(slid11);
+	slid11.setSliderStyle(Slider::SliderStyle::Rotary);
+	slid11.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+
 
 }
 
@@ -162,13 +172,15 @@ void MainComponent::resized()
 
 	Rectangle <int> area = getLocalBounds();
 	Rectangle <int> up = area.removeFromTop((area.getHeight()/4));
-	Rectangle <int> center1 = area.removeFromTop((area.getHeight() / 3) * 2);
-	Rectangle <int> center2 = area.removeFromTop((area.getHeight() / 3) * 2);
-	Rectangle <int> bottom = area.removeFromBottom(area.getHeight()/3);
+	Rectangle <int> center1 = area.removeFromTop((area.getHeight() / 4) * 2);
+	Rectangle <int> center2 = area.removeFromTop((area.getHeight() / 4) * 2);
+	Rectangle <int> center3 = area.removeFromTop((area.getHeight() / 8) * 6);
+	Rectangle <int> bottom = area.removeFromBottom(area.getHeight()/ 8);
 
-	Rectangle <int> areaButtons = center2.removeFromRight((getWidth() / 10) * 8);
+	Rectangle <int> areaButtons = center3.removeFromRight((getWidth() / 10) * 8);
 	Rectangle <int> areaVolumeSliders = up.removeFromRight((getWidth() / 10) * 8);
 	Rectangle <int> areaOtherSliders = center1.removeFromRight((getWidth() / 10) * 8);
+	Rectangle <int> areaPippoliBonus = center2.removeFromRight((getWidth() / 10) * 8);
 
 	//Buttons
 	int xButton = areaButtons.getWidth() / 8;
@@ -212,6 +224,11 @@ void MainComponent::resized()
 
 	Rectangle<int> instrumentSelectorRect = up.removeFromLeft(getWidth() / 7);
 	instrumentSelector.setBounds(instrumentSelectorRect);
+
+	//Pippoli bonus
+	slid9.setBounds(areaPippoliBonus.removeFromLeft(xButton));
+	slid10.setBounds(areaPippoliBonus.removeFromLeft(xButton));
+	slid11.setBounds(areaPippoliBonus.removeFromLeft(xButton));
 }
 
 
