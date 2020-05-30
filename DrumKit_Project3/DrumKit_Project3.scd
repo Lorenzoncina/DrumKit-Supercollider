@@ -11,12 +11,13 @@ s.boot;
 // --- bass drum --- //
 
 SynthDef.new("bd", {
-    arg  n=0.76966457366943, nl = 0.016062397956848, start=63.017123937607, end=1, l1=0.094613754749298, l2=0.72694784402847, exp=2;
+    arg  n=0.76966457366943, nl = 0.016062397956848, start=63.017123937607, end=1, l1=0.094613754749298, l2=0.72694784402847, exp=2, amp=0.1;
     var boom;
 	e = pow(Line.ar(0.9,0,l2, doneAction: 2),exp);//2="freeSelf" ==> frees enclosing synth
 
     boom = BBandPass.ar(WhiteNoise.ar(),freq:Line.ar(100,10,nl))*Line.ar(1,0,nl)*n+
     SinOsc.ar(Line.ar(start, end, l1))*e;
+	boom = boom*amp;
     Out.ar(0,[boom,boom])
 
 }).add;
@@ -300,7 +301,7 @@ OSCdef(\volume,{
 	vol = msg[1].linexp(0, 1, 0.01, 0.6);
 	synth = msg[2];
 	switch(synth,
-		\bd, {~amp_kc_temp = vol;}
+		\bd, {~amp_bd_temp = vol;},
 		\hh, {~amp_hh_temp = vol;},
 		\sn, {~amp_sn_temp = vol;},
 		\cb, {~amp_cb_temp = vol;},
@@ -330,7 +331,7 @@ s.plotTree;
 (
 var bd, hh, sn, cb, kc, fm, ce, tom, t, min, max;
 var bd_knobs, hh_knobs, sn_knobs, cb_knobs, kc_knobs, fm_knobs, ce_knobs, tom_knobs;
-~l1_temp; ~start_temp; ~amp_kc_temp; ~q_temp; ~ffreq_hh_temp; ~amp_hh_temp; ~sinfreq_temp; ~ffreq_sn_temp; ~amp_sn_temp;
+~l1_temp; ~start_temp; ~amp_bd_temp; ~q_temp; ~ffreq_hh_temp; ~amp_hh_temp; ~sinfreq_temp; ~ffreq_sn_temp; ~amp_sn_temp;
 ~sinfreq_temp; ~fundfreq_temp; ~amp_cb_temp; ~start_temp; ~amp_kc_temp; ~fc_temp; ~amp_fm_temp; ~value_temp;
 ~amp_clap_e_temp; ~pitchRel_temp; ~startPitch_temp; ~amp_tom_temp;
 w = Window.new(name: "DRUM KIT", bounds:Rect(100,300,800,400)).front;
@@ -359,7 +360,7 @@ tom.string = "tom";
 
 bd.mouseDownAction = {
 	var bass_drum;
-	bass_drum = Synth(\bd, [\l1,~l1_temp, \start, ~start_temp]);
+	bass_drum = Synth(\bd, [\l1,~l1_temp, \start, ~start_temp, \amp, ~amp_bd_temp]);
 };
 bd_knobs = Array.newClear(2); //number of paramters = number of knobs
 bd_knobs[0] = Knob(w,Rect(15,100,80,80));
@@ -453,7 +454,7 @@ ce_knobs[1].action = {~amp_clap_e_temp = ce_knobs[1].value.linexp(0, 1, 0, 3.5)}
 
 tom.mouseDownAction = {
 	var tom;
-	tom = Synth(\tom, [\pitchRel, ~pitchRel_temp, \startPitch, ~startPitch_temp]);
+	tom = Synth(\tom, [\pitchRel, ~pitchRel_temp, \startPitch, ~startPitch_temp, \amp, ~amp_tom_temp]);
 };
 tom_knobs = Array.newClear(2);
 tom_knobs[0] = Knob(w,Rect(715,100,80,80));
