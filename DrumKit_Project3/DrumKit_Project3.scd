@@ -184,7 +184,7 @@ SynthDef("ce", {
 
 (
 SynthDef("tom", {
-    arg startPitch = 1000, endPitch=60, clickLevel=0.7, pitchRel = 0.11, noiseLevel=1, noiseRel= 0.3;
+    arg startPitch = 1000, endPitch=60, clickLevel=0.7, pitchRel = 0.11, noiseLevel=1, noiseRel= 0.3, amp=0.1;
     var pitchEnv = EnvGen.ar(Env.perc(0.01, pitchRel));
 
     var clickOsc = SinOsc.ar(pitchEnv*(startPitch-endPitch)+endPitch);
@@ -192,6 +192,7 @@ SynthDef("tom", {
     var noiseOsc = PinkNoise.ar();
     var noiseEnv = EnvGen.ar(Env.perc(0.01, noiseRel), doneAction:2)*noiseLevel;
     var snd =  noiseOsc * noiseEnv +clickOsc *clickEnv;
+	snd = snd*amp;
     Out.ar(0,Pan2.ar(snd, 0, 1));
 }).add;
 )
@@ -299,8 +300,14 @@ OSCdef(\volume,{
 	vol = msg[1].linexp(0, 1, 0.01, 0.6);
 	synth = msg[2];
 	switch(synth,
+		\bd, {~amp_kc_temp = vol;}
 		\hh, {~amp_hh_temp = vol;},
-		\sn, {~amp_sn_temp = vol;}
+		\sn, {~amp_sn_temp = vol;},
+		\cb, {~amp_cb_temp = vol;},
+		\kc, {~amp_kc_temp = vol;},
+		\fm, {~amp_fm_temp = vol;},
+		\ce, {~amp_clap_e_temp = vol;},
+		\tom, {~amp_tom_temp = vol;}
 	)
 },
 '/amp'
@@ -323,9 +330,9 @@ s.plotTree;
 (
 var bd, hh, sn, cb, kc, fm, ce, tom, t, min, max;
 var bd_knobs, hh_knobs, sn_knobs, cb_knobs, kc_knobs, fm_knobs, ce_knobs, tom_knobs;
-~l1_temp; ~start_temp; ~q_temp; ~ffreq_hh_temp; ~amp_hh_temp; ~sinfreq_temp; ~ffreq_sn_temp; ~amp_sn_temp;
+~l1_temp; ~start_temp; ~amp_kc_temp; ~q_temp; ~ffreq_hh_temp; ~amp_hh_temp; ~sinfreq_temp; ~ffreq_sn_temp; ~amp_sn_temp;
 ~sinfreq_temp; ~fundfreq_temp; ~amp_cb_temp; ~start_temp; ~amp_kc_temp; ~fc_temp; ~amp_fm_temp; ~value_temp;
-~amp_clap_e_temp; ~pitchRel_temp; ~startPitch_temp;
+~amp_clap_e_temp; ~pitchRel_temp; ~startPitch_temp; ~amp_tom_temp;
 w = Window.new(name: "DRUM KIT", bounds:Rect(100,300,800,400)).front;
 bd = Button.new(w,Rect(10,10,80,80));
 bd.string = "bass drum";

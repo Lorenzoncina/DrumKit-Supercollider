@@ -29,7 +29,7 @@ MainComponent::MainComponent()
 	vol1.setSliderStyle(Slider::SliderStyle::Rotary);
 	vol1.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0,0);
 	vol1.addListener(this);
-	vol1.synth = "sn";
+	vol1.synth = "bd";
 	addAndMakeVisible(vol1);
 	
 
@@ -45,36 +45,48 @@ MainComponent::MainComponent()
 	vol3.setValue(0.5);
 	vol3.setSliderStyle(Slider::SliderStyle::Rotary);
 	vol3.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+	vol3.addListener(this);
+	vol3.synth = "sn";
 	addAndMakeVisible(vol3);
 	
 	vol4.setRange(0.0, 1.0, 0.01);
 	vol4.setValue(0.5);
 	vol4.setSliderStyle(Slider::SliderStyle::Rotary);
 	vol4.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+	vol4.addListener(this);
+	vol4.synth = "cb";
 	addAndMakeVisible(vol4);
 
 	vol5.setRange(0.0, 1.0, 0.01);
 	vol5.setValue(0.5);
 	vol5.setSliderStyle(Slider::SliderStyle::Rotary);
 	vol5.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+	vol5.addListener(this);
+	vol5.synth = "kc";
 	addAndMakeVisible(vol5);
 
 	vol6.setRange(0.0, 1.0, 0.01);
 	vol6.setValue(0.5);
 	vol6.setSliderStyle(Slider::SliderStyle::Rotary);
 	vol6.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+	vol6.addListener(this);
+	vol6.synth = "fm";
 	addAndMakeVisible(vol6);
 
 	vol7.setRange(0.0, 1.0, 0.01);
 	vol7.setValue(0.5);
 	vol7.setSliderStyle(Slider::SliderStyle::Rotary);
 	vol7.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+	vol7.addListener(this);
+	vol7.synth = "ce";
 	addAndMakeVisible(vol7);
 
 	vol8.setRange(0.0, 1.0, 0.01);
 	vol8.setValue(0.5);
 	vol8.setSliderStyle(Slider::SliderStyle::Rotary);
 	vol8.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+	vol8.addListener(this);
+	vol8.synth = "tom";
 	addAndMakeVisible(vol8);
 
 	//Other SLiders
