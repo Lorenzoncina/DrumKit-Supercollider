@@ -1,2 +1,0 @@
-**/DrumKitGUI/Builds
-**/DrumKitGUI/JuceLibraryCode

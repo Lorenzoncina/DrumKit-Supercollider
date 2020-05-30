@@ -142,7 +142,7 @@ SynthDef("fm", {
 
 // --- clap_electro --- //
 
-( 
+(
 SynthDef("ce", {
     |out = 0, amp = 0.5, pan = 0, dur = 1, value = 7600|
     var env1, env2, snd, noise1, noise2;
@@ -190,7 +190,7 @@ SynthDef("tom", {
     var clickOsc = SinOsc.ar(pitchEnv*(startPitch-endPitch)+endPitch);
     var clickEnv = EnvGen.ar(Env.perc(0.001, pitchRel))*clickLevel;
     var noiseOsc = PinkNoise.ar();
-    var noiseEnv = EnvGen.ar(Env.perc(0.01, noiseRel))*noiseLevel;
+    var noiseEnv = EnvGen.ar(Env.perc(0.01, noiseRel), doneAction:2)*noiseLevel;
     var snd =  noiseOsc * noiseEnv +clickOsc *clickEnv;
     Out.ar(0,Pan2.ar(snd, 0, 1));
 }).add;
@@ -236,12 +236,30 @@ OSCdef('OSCreceiver', {
 }, "/click");
 )
 
+//--------- JUCE--->SC OSC COMMUNICATION -------/////
+/////////////////////////////////////////////////////
+
+
+//Volume knobs
+(
+OSCdef(\volume,{
+	arg msg, time, addr, port;
+	var vol, synth, x;
+	vol = msg[1].linexp(0.01, 0.3);
+	synth = msg[2];
+
+},
+'/amp'
+);
+)
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
+s.plotTree;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -252,7 +270,7 @@ OSCdef('OSCreceiver', {
 var bd, hh, sn, cb, kc, fm, ce, tom, t, min, max;
 var bd_knobs, hh_knobs, sn_knobs, cb_knobs, kc_knobs, fm_knobs, ce_knobs, tom_knobs;
 ~l1_temp; ~start_temp; ~q_temp; ~ffreq_hh_temp; ~amp_hh_temp; ~sinfreq_temp; ~ffreq_sn_temp; ~amp_sn_temp;
-~sinfreq_temp; ~fundfreq_temp; ~amp_cb_temp; ~start_temp; ~amp_cb_temp; ~fc_temp; ~amp_fm_temp; ~value_temp;
+~sinfreq_temp; ~fundfreq_temp; ~amp_cb_temp; ~start_temp; ~amp_kc_temp; ~fc_temp; ~amp_fm_temp; ~value_temp;
 ~amp_clap_e_temp; ~pitchRel_temp; ~startPitch_temp;
 w = Window.new(name: "DRUM KIT", bounds:Rect(100,300,800,400)).front;
 bd = Button.new(w,Rect(10,10,80,80));
@@ -284,7 +302,7 @@ bd.mouseDownAction = {
 };
 bd_knobs = Array.newClear(2); //number of paramters = number of knobs
 bd_knobs[0] = Knob(w,Rect(15,100,80,80));
-bd_knobs[0].action = {~l1_temp = bd_knobs[0].value.linlin(0, 1, -0.5, 2.5)}; // set min, max
+bd_knobs[0].action = {~l1_temp = bd_knobs[0].value.linlin(0, 1, 0, 2.5)}; // set min, max
 bd_knobs[1] = Knob(w,Rect(15,200,80,80));
 bd_knobs[1].action = {~start_temp = bd_knobs[1].value.linlin(0, 1, 0, 500)};
 
@@ -301,7 +319,7 @@ hh_knobs[0].action = {~q_temp = hh_knobs[0].value.linlin(0, 1, 0, 5)}; //changes
 hh_knobs[1] = Knob(w,Rect(115,200,80,80));
 hh_knobs[1].action = {~ffreq_hh_temp = hh_knobs[1].value.linlin(0, 1, 100, 15000)};
 hh_knobs[2] = Knob(w,Rect(115,300,80,80));
-hh_knobs[2].action = {~amp_hh_temp = hh_knobs[2].value.linlin(0, 1, 0, 3)};
+hh_knobs[2].action = {~amp_hh_temp = hh_knobs[2].value.linexp(0, 1, 0, 3)};
 
 
 
@@ -317,7 +335,7 @@ sn_knobs[0].action = {~sinfreq_temp = sn_knobs[0].value.linlin(0, 1, 0, 1000)};
 sn_knobs[1] = Knob(w,Rect(215,200,80,80));
 sn_knobs[1].action = {~ffreq_sn_temp = sn_knobs[1].value.linlin(0, 1, 100, 5000)};
 sn_knobs[2] = Knob(w,Rect(215,300,80,80));
-sn_knobs[2].action = {~amp_sn_temp = sn_knobs[2].value.linlin(0, 1, 0, 2)};
+sn_knobs[2].action = {~amp_sn_temp = sn_knobs[2].value.linexp(0, 1, 0, 2)};
 
 
 
@@ -330,20 +348,20 @@ cb_knobs = Array.newClear(2);
 cb_knobs[0] = Knob(w,Rect(315,100,80,80));
 cb_knobs[0].action = {~fundfreq_temp = cb_knobs[0].value.linlin(0, 1, 30, 1000)};
 cb_knobs[1] = Knob(w,Rect(315,200,80,80));
-cb_knobs[1].action = {~amp_cb_temp = cb_knobs[1].value.linlin(0, 1, 0, 3)};
+cb_knobs[1].action = {~amp_cb_temp = cb_knobs[1].value.linexp(0, 1, 0, 3)};
 
 
 
 
 kc.mouseDownAction = {
 	var kick;
-	kick = Synth(\kc, [\start, ~start_temp, \amp, ~amp_cb_temp]);
+	kick = Synth(\kc, [\start, ~start_temp, \amp, ~amp_kc_temp]);
 };
 kc_knobs = Array.newClear(2);
 kc_knobs[0] = Knob(w,Rect(415,100,80,80));
 kc_knobs[0].action = {~start_temp = kc_knobs[0].value.linlin(0, 1, 40, 2000)};
 kc_knobs[1] = Knob(w,Rect(415,200,80,80));
-kc_knobs[1].action = {~amp_cb_temp = kc_knobs[1].value.linlin(0, 1, 0, 2)};
+kc_knobs[1].action = {~amp_kc_temp = kc_knobs[1].value.linexp(0, 1, 0, 2)};
 
 
 
@@ -356,7 +374,7 @@ fm_knobs = Array.newClear(2);
 fm_knobs[0] = Knob(w,Rect(515,100,80,80));
 fm_knobs[0].action = {~fc_temp = fm_knobs[0].value.linlin(0, 1, 200, 2500)};
 fm_knobs[1] = Knob(w,Rect(515,200,80,80));
-fm_knobs[1].action = {~amp_fm_temp = fm_knobs[1].value.linlin(0, 1, 0, 3)};
+fm_knobs[1].action = {~amp_fm_temp = fm_knobs[1].value.linexp(0, 1, 0, 3)};
 
 
 
@@ -369,7 +387,7 @@ ce_knobs = Array.newClear(2);
 ce_knobs[0] = Knob(w,Rect(615,100,80,80));
 ce_knobs[0].action = {~value_temp = ce_knobs[0].value.linlin(0, 1, 200, 9000)};
 ce_knobs[1] = Knob(w,Rect(615,200,80,80));
-ce_knobs[1].action = {~amp_clap_e_temp = ce_knobs[1].value.linlin(0, 1, 0, 3.5)};
+ce_knobs[1].action = {~amp_clap_e_temp = ce_knobs[1].value.linexp(0, 1, 0, 3.5)};
 
 
 tom.mouseDownAction = {
@@ -380,7 +398,7 @@ tom_knobs = Array.newClear(2);
 tom_knobs[0] = Knob(w,Rect(715,100,80,80));
 tom_knobs[0].action = {~startPitch_temp = tom_knobs[0].value.linlin(0, 1, 100, 3000)};
 tom_knobs[1] = Knob(w,Rect(715,200,80,80));
-tom_knobs[1].action = {~pitchRel_temp = tom_knobs[1].value.linlin(0, 1, 0, 1)};
+tom_knobs[1].action = {~pitchRel_temp = tom_knobs[1].value.linexp(0, 1, 0, 1)};
 
 
 )
