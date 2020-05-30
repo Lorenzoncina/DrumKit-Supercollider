@@ -160,9 +160,6 @@ NetAddr("127.0.0.1", 57120);
 var bass_drum;
 var r;
 var lst_syn = ['\bd','\hh','\sn','\cb','\kc','\fm'];
-
-//h = Synth(\fm);
-
 OSCdef('OSCreceiver', {
 
 	arg msg;
@@ -181,33 +178,49 @@ OSCdef('OSCreceiver', {
 )
 
 var bass_drum = Synth(\fm);
-bass_drum.defName
-
-
-// another osc receiver
+//bass_drum.defName
+// -----start of motion OSC receiver from iphone, using Syntien
+// represent right hand stick
 (
+// this is the right hand of the drum stick
+var bass_drum;
+var lst_syn = ['\bd','\hh','\sn','\cb','\kc','\fm'];
 OSCdef('Osc1',{
+	// prevent multiple stroke
 	arg msg;
-	a = msg[1];
-	postln("Received message 1:" + a);
-
+	x = msg[1];//acceleration on x axis
+	y = msg[2];//y
+	z = msg[3];//z
+	if(x <= -15 && y >= 15 && z >= 15 ){ bass_drum  = Synth(lst_syn[0])};
+	if(x <= -15 && y <= -15 && z >= 15 ){ bass_drum  = Synth(lst_syn[1])};
+	if(x <= -15 && y >= 15 && z <= -15){ bass_drum  = Synth(lst_syn[2])};
+	if(x <= -15 && y <= -15 && z <= -15){ bass_drum  = Synth(lst_syn[3])};
+	if(x >= 15 && y >= 15 && z >= 15){ bass_drum  = Synth(lst_syn[4])};
+	if(x >= 15 && y >= 15 && z <= -15){ bass_drum  = Synth(lst_syn[5])};
+	if(x >= 15 && y <= -15 && z >= 15){ bass_drum  = Synth(lst_syn[6])};
+	if(x >= 15 && y <= -15 && z <= -15){ bass_drum  = Synth(lst_syn[7])};
 },"/accel/1");
-
 )
 
 (
+// this is the right hand of the drum stick
 var bass_drum;
 var lst_syn = ['\bd','\hh','\sn','\cb','\kc','\fm'];
 OSCdef('Osc2',{
+	// prevent multiple stroke
 	arg msg;
-	x = msg[1];
-	y = msg[2];
-	z = msg[3];
-	if(x > 15){ bass_drum  = Synth(lst_syn[0])};
-	if(y > 15){ bass_drum  = Synth(lst_syn[1])};
-	if(z > 15){ bass_drum  = Synth(lst_syn[2])};
+	x = msg[1];//acceleration on x axis
+	y = msg[2];//y
+	z = msg[3];//z
+	if(x >= 15 && y >= 15 && z >= 15 ){ bass_drum  = Synth(lst_syn[0])};
+	if(x >= 15 && y <= -15 && z >= 15 ){ bass_drum  = Synth(lst_syn[1])};
+	if(x >= 15 && y >= 15 && z <= -15){ bass_drum  = Synth(lst_syn[2])};
+	if(x >= 15 && y <= -15 && z <= -15){ bass_drum  = Synth(lst_syn[3])};
+	if(x <= -15 && y >= 15 && z >= 15){ bass_drum  = Synth(lst_syn[4])};
+	if(x <= -15 && y >= 15 && z <= -15){ bass_drum  = Synth(lst_syn[5])};
+	if(x <= -15 && y <= -15 && z >= 15){ bass_drum  = Synth(lst_syn[6])};
+	if(x <= -15 && y <= -15 && z <= -15){ bass_drum  = Synth(lst_syn[7])};
 },"/accel/2");
-
 )
 
 
