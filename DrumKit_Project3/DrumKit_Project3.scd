@@ -296,9 +296,12 @@ OSCdef('Osc2',{
 OSCdef(\volume,{
 	arg msg, time, addr, port;
 	var vol, synth, x;
-	vol = msg[1].linexp(0.01, 0.3);
+	vol = msg[1].linexp(0, 1, 0.01, 0.6);
 	synth = msg[2];
-
+	switch(synth,
+		\hh, {~amp_hh_temp = vol;},
+		\sn, {~amp_sn_temp = vol;}
+	)
 },
 '/amp'
 );
