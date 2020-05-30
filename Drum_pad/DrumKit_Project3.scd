@@ -49,7 +49,6 @@ SynthDef("hh", {
 
 
 // --- snare drum --- //
-
 (
 SynthDef("sn", {
     arg startPitch = 7000, endPitch=294, clickLevel=0.11299884319305, pitchRel = 0.03270231127739, noiseLevel=0.75628386735916, noiseRel= 0.40486946344376;
@@ -113,7 +112,7 @@ SynthDef("kc", {
 }).add;
 )
 //uncomment ad execute the following line of code if you want to listen to the sound
-k = Synth.new("kc");
+//k = Synth.new("kc");
 
 
 // --- frequencymodulator --- //
@@ -152,7 +151,9 @@ SynthDef("fm", {
 ////////////////////////////////// connection Supercollider <--> OSC <--> Processing ///////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//receive meesage
 NetAddr("127.0.0.1", 57120);
+//send message
 ~n1 = NetAddr.new("127.0.0.1", 12000);
 // the bass drum is played when the square is clicked
 (
@@ -183,6 +184,31 @@ var bass_drum = Synth(\fm);
 bass_drum.defName
 
 
+// another osc receiver
+(
+OSCdef('Osc1',{
+	arg msg;
+	a = msg[1];
+	postln("Received message 1:" + a);
+
+},"/accel/1");
+
+)
+
+(
+var bass_drum;
+var lst_syn = ['\bd','\hh','\sn','\cb','\kc','\fm'];
+OSCdef('Osc2',{
+	arg msg;
+	x = msg[1];
+	y = msg[2];
+	z = msg[3];
+	if(x > 15){ bass_drum  = Synth(lst_syn[0])};
+	if(y > 15){ bass_drum  = Synth(lst_syn[1])};
+	if(z > 15){ bass_drum  = Synth(lst_syn[2])};
+},"/accel/2");
+
+)
 
 
 

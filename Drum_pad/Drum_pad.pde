@@ -17,8 +17,11 @@ int Syn_Type;
 OscMessage myMessage;
 // doing : link supercollider
 int color1,color2,color3;
-PImage ava6;
 PImage bg; // load background image
+PImage select; // load sl
+// init all ava img
+String[] path = {"pic/avatar1.png","pic/avatar2.png","pic/avatar3.png","pic/avatar4.png","pic/avatar5.png","pic/avatar6.png"};
+PImage[] images = new PImage[path.length];
 
 void paintSquares(int alpha) {
   noStroke();
@@ -43,6 +46,22 @@ void showPressShadow(int x, int y) {
   line(x, y, x, y+lineheight-2/2);
 }
 
+//set avatar init path, load img
+void setAvatar(){
+  for(int i = 0; i<=5;i++){
+    images[i] = loadImage(path[i]);
+  }
+    imageMode(CENTER);
+    //------------------- to do
+    image(images[0],220,200);
+    image(images[1],440,200);
+    image(images[2],680,200);
+    image(images[3],125,320);
+    image(images[4],380, 320);
+    image(images[5],600, 320);
+  //}
+}
+
 // ---------- Processing Funtion
 // setup(): initialize the window, runs once
 void setup() {
@@ -51,16 +70,17 @@ void setup() {
   //background(255);
   // paint the interactive square first
   paintSquares(100);
-  bg = loadImage("pic/background.jpg");
+  bg = loadImage("pic/background1.jpg");
   background(bg);
-  // set ava6
-  ava6 = loadImage("pic/avatar6.png");
-  
+  select = loadImage("pic/select.png");
+  //ava5 = loadImage("pic/avatar6.png");
+  //insted, set all avatar
+  setAvatar();
   oscP5 = new OscP5(this, 12000);
   myRemoteLocation = new NetAddress("127.0.0.1", 57120);
   myReceiverLocation = new NetAddress("127.0.0.1", 57130);
   Syn_Type = -1;
-  //ava6 = loadImage("pic/avatar6.png");
+  //ava5 = loadImage("pic/avatar6.png");
   systems = new ArrayList<ParticleSystem>();// add new ps
 }
 
@@ -73,13 +93,14 @@ void draw() {
   background(bg);
   //paint square back
   paintSquares(15);
-  // set avatar back
-  ava6 = loadImage("pic/avatar6.png");
-  // show avatar img
-  image(ava6, 550, 300);
+  // ----- set avatar back
+  // loda all avatar img
+  setAvatar();
+  //ava5 = loadImage("pic/avatar6.png");
+  //image(ava5, 550, 300);
   fill(255);
   noStroke();
-  ellipse(mouseX, mouseY, 10, 10);
+  image(select,mouseX, mouseY);//elipse(mouseX, mouseY, 10, 10);
   // add particle system
     if (systems.isEmpty()) {
     fill(255);
@@ -159,8 +180,8 @@ void changeSquareColor(int n, int color1,int color2,int color3){
    rect(x[n],y[n],width/3,height/2);
    //change ava
    if (n == 5){
-        ava6 = loadImage("pic/avatar6c.png");
-        image(ava6, 550, 300);
+        images[5] = loadImage("pic/avatar6c.png");
+        image(images[5], 600, 320);
    };
 }
   
@@ -235,8 +256,7 @@ class CrazyParticle extends Particle {
     theta = 0.0;
   }
 
-  // Notice we don't have the method run() here; it is inherited from Particle
-
+  // no method run() here, inherited from Particle
   // This update() method overrides the parent class update() method
   void update() {
     super.update();
@@ -284,13 +304,14 @@ class Particle {
   void update() {
     velocity.add(acceleration);
     position.add(velocity);
-    lifespan -= 5.0;
+    lifespan -= 2.0;
   }
 
   // Method to display
   void display() {
-    stroke(#F9BC45, lifespan-60); //darker stroke
-    fill(#FAF184, lifespan-60);// brighter filling color
+    //#F9BC45,#FAF184
+    stroke(#4C139D, lifespan-60); //darker stroke
+    fill(#58C4F0, lifespan-60);// brighter filling color
     ellipse(position.x, position.y, 5, 5);
   }
 
