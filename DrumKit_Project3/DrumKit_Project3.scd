@@ -251,14 +251,14 @@ OSCdef('Osc1',{
 	x = msg[1];//acceleration on x axis
 	y = msg[2];//y
 	z = msg[3];//z
-	if((x <= -5 )&& (y >= 5 )&& (z >= 5 )){ drum  = Synth(lst_syn[0])};
-	if((x <= -5 )&& (y <= -5 )&& (z >= 5 )){ drum  = Synth(lst_syn[1])};
-	if((x <= -5 )&& (y >= 5 )&& (z <= -5)){ drum  = Synth(lst_syn[2])};
-	if((x <= -5 )&& (y <= -5 )&& (z <= -5)){ drum  = Synth(lst_syn[3])};
-	/*if((x >= 15 )&& (y >= 15 )&& (z >= 15)){ drum  = Synth(lst_syn[4])};
-	if((x >= 15 )&& (y >= 15 )&& (z <= -15)){ drum  = Synth(lst_syn[5])};
-	if((x >= 15 )&& (y <= -15) && (z >= 15)){ drum  = Synth(lst_syn[6])};
-	if((x >= 15) && (y <= -15) && (z <= -15)){ drum  = Synth(lst_syn[7])};*/
+	if((x <= -5 )&& (y >= 5 )&& (z >= 5 )){ drum  = Synth(lst_syn[3])};
+	if((x <= -5 )&& (y <= -5 )&& (z >= 5 )){ drum  = Synth(lst_syn[4])};
+	if((x <= -5 )&& (y >= 5 )&& (z <= -5)){ drum  = Synth(lst_syn[5])};
+	/*if((x <= -5 )&& (y <= -5 )&& (z <= -5)){ drum  = Synth(lst_syn[3])};
+	if((x >= 5 )&& (y >= 5 )&& (z >= 5)){ drum  = Synth(lst_syn[4])};
+	if((x >= 5 )&& (y >= 5 )&& (z <= -5)){ drum  = Synth(lst_syn[5])};
+	if((x >= 5 )&& (y <= -5) && (z >= 5)){ drum  = Synth(lst_syn[6])};
+	if((x >= 5) && (y <= -5) && (z <= -5)){ drum  = Synth(lst_syn[7])};*/
 },"/accel/1");
 )
 
@@ -273,14 +273,14 @@ OSCdef('Osc2',{
 	y = msg[2];//y
 	z = msg[3];//z
 	postln("Received:"+x,y,z);
-	/*if((x >= 5) && (y >= 5) && (z >= 5) ){ drum  = Synth(lst_syn[0])};
+	if((x >= 5) && (y >= 5) && (z >= 5) ){ drum  = Synth(lst_syn[0])};
 	if((x >= 5) && (y <= -5) && (z >= 5) ){ drum  = Synth(lst_syn[1])};
 	if((x >= 5) && (y >= 5) && (z <= -5)){ drum  = Synth(lst_syn[2])};
-	if((x >= 5) && (y <= -5) && (z <= -5)){ drum  = Synth(lst_syn[3])};
-	*/if((x <= -5) && (y >= 5) && (z >= 5)){ drum  = Synth(lst_syn[4])};
-	if((x <= -5) && (y >= 5) && (z <= -5)){ drum  = Synth(lst_syn[5])};
-	if((x <= -5) && (y <= -5) && (z >= 5)){ drum  = Synth(lst_syn[6])};
-	if((x <= -5) && (y <= -5) && (z <= -5)){ drum  = Synth(lst_syn[7])};
+	//if((x >= 5) && (y <= -5) && (z <= -5)){ drum  = Synth(lst_syn[3])};
+	//if((x <= -5) && (y >= 5) && (z >= 5)){ drum  = Synth(lst_syn[4])};
+	//if((x <= -5) && (y >= 5) && (z <= -5)){ drum  = Synth(lst_syn[5])};
+	//if((x <= -5) && (y <= -5) && (z >= 5)){ drum  = Synth(lst_syn[6])};
+	//if((x <= -5) && (y <= -5) && (z <= -5)){ drum  = Synth(lst_syn[7])};
 },"/accel/2");
 )
 
