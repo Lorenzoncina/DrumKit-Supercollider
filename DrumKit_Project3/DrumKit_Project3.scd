@@ -35,10 +35,10 @@ you cannot even free it manually anymore. -Mattia***/
 // ---hi hat --- //
 (
 SynthDef("hh", {
-    arg noiseRel = 0.25380977392197, noiseLevel=0.18370378851891, ffreq=9853, q=0.59219532012939;
+    arg noiseRel = 0.25380977392197, noiseLevel=0.18370378851891, ffreq=9853, q=0.59219532012939, amp=0.3;
     var noiseOsc = BBandPass.ar(PinkNoise.ar(), ffreq, q);
 	var noiseEnv = EnvGen.ar(Env.perc(0.01, noiseRel), doneAction: 2);
-    var snd = noiseOsc * noiseEnv * 1.4;
+    var snd = noiseOsc * noiseEnv * 6*amp;
     Out.ar(0,Pan2.ar(snd, 0, 1));
 }).add;
 )
@@ -103,13 +103,13 @@ SynthDef("cb", {
 // --- kick --- //
 (
 SynthDef("kc", {
-	arg amp=0.1, pan=0;
+	arg amp=0.1, pan=0, start=472;
     var snd;
     snd = DC.ar(0);
     snd = snd + (SinOsc.ar(XLine.ar(1500, 800, 0.01)) * Env.perc(0.0005, 0.01, curve: \lin).ar);
     snd = snd + (BPF.ar(Impulse.ar(0) * SampleRate.ir / 48000, 6100, 1.0) * 3.dbamp);
     snd = snd + (BPF.ar(Hasher.ar(Sweep.ar), 300, 0.9) * Env.perc(0.001, 0.02).ar);
-    snd = snd + (SinOsc.ar(XLine.ar(472, 60, 0.045)) * Env.perc(0.0001, 0.3, curve: \lin).delay(0.005).ar(2));
+    snd = snd + (SinOsc.ar(XLine.ar(start, 60, 0.045)) * Env.perc(0.0001, 0.3, curve: \lin).delay(0.005).ar(2));
     snd = snd.tanh;
     Out.ar(\out.kr(0), Pan2.ar(snd, pan, amp));
 }).add;
@@ -284,10 +284,9 @@ bd.mouseDownAction = {
 };
 bd_knobs = Array.newClear(2); //number of paramters = number of knobs
 bd_knobs[0] = Knob(w,Rect(15,100,80,80));
-bd_knobs[0].action = {~l1_temp = bd_knobs[0].linlin(0, 1, min, max)}; // set min, max
+bd_knobs[0].action = {~l1_temp = bd_knobs[0].value.linlin(0, 1, -0.5, 2.5)}; // set min, max
 bd_knobs[1] = Knob(w,Rect(15,200,80,80));
-bd_knobs[1].action = {~start_temp = bd_knobs[1].linlin(0, 1, min, max)};
-
+bd_knobs[1].action = {~start_temp = bd_knobs[1].value.linlin(0, 1, 0, 500)};
 
 
 
@@ -296,14 +295,13 @@ hh.mouseDownAction = {
 	var hit_hat;
 	hit_hat = Synth(\hh, [\q, ~q_temp, \ffreq, ~ffreq_hh_temp, \amp, ~amp_hh_temp]);
 };
-
 hh_knobs = Array.newClear(3);
 hh_knobs[0] = Knob(w,Rect(115,100,80,80));
-hh_knobs[0].action = {~q_temp = hh_knobs[0].linlin(0, 1, min, max)};
+hh_knobs[0].action = {~q_temp = hh_knobs[0].value.linlin(0, 1, 0, 5)}; //changes the bandwidth of the noiseOsc
 hh_knobs[1] = Knob(w,Rect(115,200,80,80));
-hh_knobs[1].action = {~ffreq_temp = hh_knobs[1].linlin(0, 1, min, max)};
+hh_knobs[1].action = {~ffreq_hh_temp = hh_knobs[1].value.linlin(0, 1, 100, 15000)};
 hh_knobs[2] = Knob(w,Rect(115,300,80,80));
-hh_knobs[2].action = {~amp_temp = hh_knobs[2].linlin(0, 1, min, max)};
+hh_knobs[2].action = {~amp_hh_temp = hh_knobs[2].value.linlin(0, 1, 0, 3)};
 
 
 
@@ -315,26 +313,24 @@ sn.mouseDownAction = {
 };
 sn_knobs = Array.newClear(3);
 sn_knobs[0] = Knob(w,Rect(215,100,80,80));
-sn_knobs[0].action = {~q_temp = sn_knobs[0].linlin(0, 1, min, max)};
+sn_knobs[0].action = {~sinfreq_temp = sn_knobs[0].value.linlin(0, 1, 0, 1000)};
 sn_knobs[1] = Knob(w,Rect(215,200,80,80));
-sn_knobs[1].action = {~ffreq_sn_temp = sn_knobs[1].linlin(0, 1, min, max)};
+sn_knobs[1].action = {~ffreq_sn_temp = sn_knobs[1].value.linlin(0, 1, 100, 5000)};
 sn_knobs[2] = Knob(w,Rect(215,300,80,80));
-sn_knobs[2].action = {~amp_sn_temp = sn_knobs[2].linlin(0, 1, min, max)};
-
+sn_knobs[2].action = {~amp_sn_temp = sn_knobs[2].value.linlin(0, 1, 0, 2)};
 
 
 
 
 cb.mouseDownAction = {
 	var cowbell;
-	cowbell = Synth(\cb, [\fundfreq, ~fundfreq_temp, \amp, ~amp_cb_temp]);
+	cowbell = Synth(\cb, [\fund_freq, ~fundfreq_temp, \amp, ~amp_cb_temp]);
 };
 cb_knobs = Array.newClear(2);
 cb_knobs[0] = Knob(w,Rect(315,100,80,80));
-cb_knobs[0].action = {~fundfreq_temp = cb_knobs[0].linlin(0, 1, min, max)};
+cb_knobs[0].action = {~fundfreq_temp = cb_knobs[0].value.linlin(0, 1, 30, 1000)};
 cb_knobs[1] = Knob(w,Rect(315,200,80,80));
-cb_knobs[1].action = {~amp_cb_temp = cb_knobs[1].linlin(0, 1, min, max)};
-
+cb_knobs[1].action = {~amp_cb_temp = cb_knobs[1].value.linlin(0, 1, 0, 3)};
 
 
 
@@ -345,10 +341,9 @@ kc.mouseDownAction = {
 };
 kc_knobs = Array.newClear(2);
 kc_knobs[0] = Knob(w,Rect(415,100,80,80));
-kc_knobs[0].action = {~start_temp = kc_knobs[0].linlin(0, 1, min, max)};
+kc_knobs[0].action = {~start_temp = kc_knobs[0].value.linlin(0, 1, 40, 2000)};
 kc_knobs[1] = Knob(w,Rect(415,200,80,80));
-kc_knobs[1].action = {~amp_cb_temp = kc_knobs[1].linlin(0, 1, min, max)};
-
+kc_knobs[1].action = {~amp_cb_temp = kc_knobs[1].value.linlin(0, 1, 0, 2)};
 
 
 
@@ -359,10 +354,9 @@ fm.mouseDownAction = {
 };
 fm_knobs = Array.newClear(2);
 fm_knobs[0] = Knob(w,Rect(515,100,80,80));
-fm_knobs[0].action = {~fc_temp = fm_knobs[0].linlin(0, 1, min, max)};
+fm_knobs[0].action = {~fc_temp = fm_knobs[0].value.linlin(0, 1, 200, 2500)};
 fm_knobs[1] = Knob(w,Rect(515,200,80,80));
-fm_knobs[1].action = {~amp_fm_temp = fm_knobs[1].linlin(0, 1, min, max)};
-
+fm_knobs[1].action = {~amp_fm_temp = fm_knobs[1].value.linlin(0, 1, 0, 3)};
 
 
 
@@ -373,11 +367,9 @@ ce.mouseDownAction = {
 };
 ce_knobs = Array.newClear(2);
 ce_knobs[0] = Knob(w,Rect(615,100,80,80));
-ce_knobs[0].action = {~value_temp = ce_knobs[0].linlin(0, 1, min, max)};
+ce_knobs[0].action = {~value_temp = ce_knobs[0].value.linlin(0, 1, 200, 9000)};
 ce_knobs[1] = Knob(w,Rect(615,200,80,80));
-ce_knobs[1].action = {~amp_clap_e_temp = ce_knobs[1].linlin(0, 1, min, max)};
-
-
+ce_knobs[1].action = {~amp_clap_e_temp = ce_knobs[1].value.linlin(0, 1, 0, 3.5)};
 
 
 tom.mouseDownAction = {
@@ -386,9 +378,9 @@ tom.mouseDownAction = {
 };
 tom_knobs = Array.newClear(2);
 tom_knobs[0] = Knob(w,Rect(715,100,80,80));
-tom_knobs[0].action = {~pitchRel_temp = tom_knobs[0].linlin(0, 1, min, max)};
+tom_knobs[0].action = {~startPitch_temp = tom_knobs[0].value.linlin(0, 1, 100, 3000)};
 tom_knobs[1] = Knob(w,Rect(715,200,80,80));
-tom_knobs[1].action = {~pitchRel_temp = tom_knobs[1].linlin(0, 1, min, max)};
+tom_knobs[1].action = {~pitchRel_temp = tom_knobs[1].value.linlin(0, 1, 0, 1)};
 
 
 )
