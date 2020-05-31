@@ -322,7 +322,7 @@ OSCdef(\volume,{
 
 
 s.plotTree;
-s.meter;
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////// Supercollider <--> GUI ///////////////////////////////////////////////////////////////////
@@ -343,6 +343,7 @@ buttons4keys = Array.newClear(8);
 w = Window.new(name: "DRUM KIT", bounds:Rect(100,220,810,500)).front;
 
 
+s.meter;//SHOW THE LEVELS: helps to set the volumes w/o clipping
 
 ///////////////////////////////////// bass drum ///////////////////////////////////////
 bd = Button.new(w,Rect(15,10,80,80));
@@ -756,7 +757,7 @@ knob_names[7,0] =  StaticText(w,Rect(30+700,170,90,30)).string_("START PITCH");
 
 tom_knobs[1] = Knob(w,Rect(715,200,80,80));
 tom_knobs[1].value = 0.11/1;
-tom_knobs[1].action = {~pitchRel_temp = tom_knobs[1].value.linexp(0, 1, 0, 1);
+tom_knobs[1].action = {~pitchRel_temp = tom_knobs[1].value.linlin(0, 1, 0, 1);
 						postln(~pitchRel_temp);
 					};
 knob_names[7,1] =  StaticText(w,Rect(50+700,170+100,90,30)).string_("PITCH REL");
