@@ -346,8 +346,8 @@ w = Window.new(name: "DRUM KIT", bounds:Rect(100,220,810,500)).background_(Color
 s.meter;//SHOW THE LEVELS: helps to set the volumes w/o clipping
 
 ///////////////////////////////////// bass drum ///////////////////////////////////////
-bd = Button.new(w,Rect(15,10,80,80)).states_([["BassDrum", Color.black, Color.red(0.9)]]);
-buttons4keys[0] = Button.new(w,Rect(15,430,80,40)).states_([["assign",Color.black, Color.red(0.9)]]);
+bd = Button.new(w,Rect(15,10,80,80)).states_([["BassDrum", Color.black, Color.fromHexString("E3D7FF")]]);
+buttons4keys[0] = Button.new(w,Rect(15,430,80,40)).states_([["assign",Color.black, Color.fromHexString("E3D7FF")]]);
 
 buttons4keys[0].mouseDownAction = {
 	v = Window.new(name: "press a key to save it", bounds:Rect(500, 500,500,100)).front;
@@ -398,8 +398,8 @@ knob_names[0,2] =  StaticText(w,Rect(40,170+200,90,30)).string_("AMP");
 
 
 ///////////////////////////////////// hit hat ///////////////////////////////////////
-hh = Button.new(w,Rect(115,10,80,80)).states_([["Hi-Hat", Color.black, Color.red(1.5)]]);
-buttons4keys[1] = Button.new(w,Rect(115,430,80,40)).states_([["assign",Color.black, Color.red(1.5)]]);
+hh = Button.new(w,Rect(115,10,80,80)).states_([["Hi-Hat", Color.black, Color.fromHexString("AFA2FF")]]);
+buttons4keys[1] = Button.new(w,Rect(115,430,80,40)).states_([["assign",Color.black, Color.fromHexString("AFA2FF")]]);
 
 
 buttons4keys[1].mouseDownAction = {
@@ -454,8 +454,8 @@ knob_names[1,2] =  StaticText(w,Rect(40+100,170+200,90,30)).string_("AMP");
 
 
 ///////////////////////////////////// snare ///////////////////////////////////////
-sn = Button.new(w,Rect(215,10,80,80)).states_([["Snare",Color.black, Color.yellow(1.3)]]);
-buttons4keys[2] = Button.new(w,Rect(215,430,80,40)).states_([["assign",Color.black, Color.yellow(1.3)]]);
+sn = Button.new(w,Rect(215,10,80,80)).states_([["Snare",Color.black, Color.fromHexString("7A89C2")]]);
+buttons4keys[2] = Button.new(w,Rect(215,430,80,40)).states_([["assign",Color.black, Color.fromHexString("7A89C2")]]);
 
 
 buttons4keys[2].mouseDownAction = {
@@ -509,8 +509,8 @@ knob_names[2,2] =  StaticText(w,Rect(40+200,170+200,90,30)).string_("AMP");
 
 
 ///////////////////////////////////// cowbell ///////////////////////////////////////
-cb = Button.new(w,Rect(315,10,80,80)).states_([["Cowbell",Color.black, Color.yellow(0.7)]]);
-buttons4keys[3] = Button.new(w,Rect(315,430,80,40)).states_([["assign",Color.black, Color.yellow(0.7)]]);
+cb = Button.new(w,Rect(315,10,80,80)).states_([["Cowbell",Color.black, Color.fromHexString("72788D")]]);
+buttons4keys[3] = Button.new(w,Rect(315,430,80,40)).states_([["assign",Color.black, Color.fromHexString("72788D")]]);
 
 
 buttons4keys[3].mouseDownAction = {
@@ -557,8 +557,8 @@ knob_names[3,1] =  StaticText(w,Rect(40+300,170+200,90,30)).string_("AMP");
 
 
 ///////////////////////////////////// kick ///////////////////////////////////////
-kc = Button.new(w,Rect(415,10,80,80)).states_([["Kick",Color.black, Color.green(0.7)]]);
-buttons4keys[4] = Button.new(w,Rect(415,430,80,40)).states_([["assign",Color.black, Color.green(0.7)]]);
+kc = Button.new(w,Rect(415,10,80,80)).states_([["Kick",Color.black, Color.fromHexString("636B61")]]);
+buttons4keys[4] = Button.new(w,Rect(415,430,80,40)).states_([["assign",Color.black, Color.fromHexString("636B61")]]);
 
 
 buttons4keys[4].mouseDownAction = {
@@ -605,8 +605,8 @@ knob_names[4,1] =  StaticText(w,Rect(40+400,170+200,90,30)).string_("AMP");
 
 
 /////////////////////////////////////// fm //////////////////////////////////////////
-fm = Button.new(w,Rect(515,10,80,80)).states_([["FM",Color.black, Color.cyan(0.7)]]);
-buttons4keys[5] = Button.new(w,Rect(515,430,80,40)).states_([["assign",Color.black, Color.cyan(0.7)]]);
+fm = Button.new(w,Rect(515,10,80,80)).states_([["FM",Color.black, Color.fromHexString("1B998B")]]);
+buttons4keys[5] = Button.new(w,Rect(515,430,80,40)).states_([["assign",Color.black, Color.fromHexString("1B998B")]]);
 
 
 buttons4keys[5].mouseDownAction = {
@@ -653,8 +653,8 @@ knob_names[5,1] =  StaticText(w,Rect(40+500,170+200,90,30)).string_("AMP");
 
 
 ///////////////////////////////////// clap electro ///////////////////////////////////////
-ce = Button.new(w,Rect(615,10,80,80)).states_([["ClapElectro",Color.black, Color.blue(1.5)]]);
-buttons4keys[6] = Button.new(w,Rect(615,430,80,40)).states_([["assign",Color.black, Color.blue(1.5)]]);
+ce = Button.new(w,Rect(615,10,80,80)).states_([["ClapElectro",Color.black, Color.fromHexString("F8F1FF")]]);
+buttons4keys[6] = Button.new(w,Rect(615,430,80,40)).states_([["assign",Color.black, Color.fromHexString("F8F1FF")]]);
 
 
 
@@ -703,8 +703,8 @@ knob_names[6,1] =  StaticText(w,Rect(40+600,170+200,90,30)).string_("AMP");
 
 
 ///////////////////////////////////// tom ///////////////////////////////////////
-tom = Button.new(w,Rect(715,10,80,80)).states_([["Tom",Color.black, Color.blue(1.8)]]);
-buttons4keys[7] = Button.new(w,Rect(715,430,80,40)).states_([["assign",Color.black, Color.blue(1.8)]]);
+tom = Button.new(w,Rect(715,10,80,80)).states_([["Tom",Color.black, Color.fromHexString("656176")]]);
+buttons4keys[7] = Button.new(w,Rect(715,430,80,40)).states_([["assign",Color.black, Color.fromHexString("656176")]]);
 
 
 buttons4keys[7].mouseDownAction = {
