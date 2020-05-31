@@ -653,8 +653,8 @@ knob_names[5,1] =  StaticText(w,Rect(40+500,170+200,90,30)).string_("AMP");
 
 
 ///////////////////////////////////// clap electro ///////////////////////////////////////
-ce = Button.new(w,Rect(615,10,80,80)).states_([["ClapElectro",Color.black, Color.fromHexString("F8F1FF")]]);
-buttons4keys[6] = Button.new(w,Rect(615,430,80,40)).states_([["assign",Color.black, Color.fromHexString("F8F1FF")]]);
+ce = Button.new(w,Rect(615,10,80,80)).states_([["ClapElectro",Color.black, Color.fromHexString("DCF2B0")]]);
+buttons4keys[6] = Button.new(w,Rect(615,430,80,40)).states_([["assign",Color.black, Color.fromHexString("DCF2B0")]]);
 
 
 
