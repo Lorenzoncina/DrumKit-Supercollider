@@ -4,7 +4,6 @@ import netP5.*;
 
 // to generate multiple particle system
 ArrayList<ParticleSystem> systems;
-
 //osc communication
 OscP5 oscP5;
 //color object
@@ -21,7 +20,8 @@ PImage select; // load sl
 // init all ava img
 String[] path = {"pic/avatar1.png","pic/avatar2.png","pic/avatar3.png","pic/avatar4.png","pic/avatar5.png","pic/avatar6.png","pic/avatar7.png","pic/avatar8.png"};
 PImage[] images = new PImage[path.length];
-
+PVector[] image_pos = new PVector[path.length]; // store ava position
+// load text font
 
 // ---------- Processing Funtion-------setup(): initialize the window, runs once
 void setup() {
@@ -32,10 +32,13 @@ void setup() {
   paintSquares(100);
   bg = loadImage("pic/background.jpg");
   background(bg);
-  select = loadImage("pic/select.png");
+  select = loadImage("pic/select.png");// the hand selector as mouse
   //ava5 = loadImage("pic/avatar6.png");
-  //insted, set all avatar
+  initAvatar();
+  //insted, set all avatar at position
   setAvatar();
+  // setup background Text "A Drum Kit"
+  textFont(createFont("ComicSansMS-48",32));
   oscP5 = new OscP5(this, 12000);
   myRemoteLocation = new NetAddress("127.0.0.1", 57120);
   myReceiverLocation = new NetAddress("127.0.0.1", 57130);
@@ -52,6 +55,12 @@ void draw() {
   background(bg);
   //paint square back
   paintSquares(15);
+  // draw Text Title "A Drum Kit"
+  textAlign(CENTER);
+  fill(#8E6762);
+  text("A Drum Kit", width/2, 70); // shadow effect
+  fill(#D33A3A,200);
+  text("A Drum Kit", width/2+2, 70);
   // ----- set avatar back
   // loda all avatar img
   setAvatar();
@@ -62,9 +71,10 @@ void draw() {
   image(select, mouseX, mouseY);//elipse(mouseX, mouseY, 10, 10);
   // add particle system
     if (systems.isEmpty()) {
-    fill(255);
+    fill(255,120);
     textAlign(CENTER);
-    text("click mouse to start playing", width/2, height/2);
+    text("click mouse to start playing", width/2, height/2 + 200);
+    
   }
   //Todo if empty free the system
   // if not empty
@@ -81,7 +91,6 @@ void mousePressed() {
   print(mouseX, mouseY);
   //----  add something for checking the square number
   Syn_Type = checkSquareNum(mouseX, mouseY);
-  
   myMessage.add(Syn_Type);
   // processing controller -> osc ->supercollider play syn from 0-5
   oscP5.send(myMessage, myRemoteLocation); 
@@ -89,6 +98,7 @@ void mousePressed() {
   // receive the changed color from supercollider
   // change the color on the clicked square
   changeSquareColor(Syn_Type,color1,color2, color3);
+  changeAva(Syn_Type);
   //New particle system
   systems.add(new ParticleSystem(20, new PVector(mouseX, mouseY)));
   

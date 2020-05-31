@@ -29,11 +29,11 @@ int checkSquareNum(int Mx, int My){
     else if(Mx > width /4 && Mx <= width *2/4 && My > height/2){
       click_stype = 5;
     }
-    else if(Mx > width * 3/4 && Mx <= width && My > height/2){
-      click_stype = 7;
+    else if(Mx > width * 2/4 && Mx <= width *3/4 && My > height/2){
+      click_stype = 6;
     }
     else {
-      click_stype = 6;
+      click_stype = 7;
     }
   return click_stype;
 }
@@ -59,9 +59,4 @@ void changeSquareColor(int n, int color1,int color2,int color3){
    int[] y = { 0, 0, 0,0, height/2, height/2, height/2, height/2};
    fill(color1,color2,color3,100);
    rect(x[n],y[n],width/4,height/2);
-   //change ava
-   if (n == 5){
-        images[5] = loadImage("pic/avatar6c.png");
-        image(images[5], 600, 320);
-   };
 }
