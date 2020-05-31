@@ -27,6 +27,7 @@ public:
     }
 
 	String  synth;
+    String  addr;
 
 private:
 	

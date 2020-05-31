@@ -36,6 +36,7 @@ MainComponent::MainComponent() : seqPanel(getLookAndFeel().findColour(ResizableW
 	vol1.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0,0);
 	vol1.addListener(this);
 	vol1.synth = "bd";
+	vol1.addr = "/amp";
 	addAndMakeVisible(vol1);
 	vol1.setLookAndFeel(&otherLookAndFeel);
 	
@@ -46,6 +47,7 @@ MainComponent::MainComponent() : seqPanel(getLookAndFeel().findColour(ResizableW
 	vol2.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 	vol2.addListener(this);
 	vol2.synth = "hh";
+	vol2.addr = "/amp";
 	addAndMakeVisible(vol2);
 	vol2.setLookAndFeel(&otherLookAndFeel);
 
@@ -55,6 +57,7 @@ MainComponent::MainComponent() : seqPanel(getLookAndFeel().findColour(ResizableW
 	vol3.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 	vol3.addListener(this);
 	vol3.synth = "sn";
+	vol3.addr = "/amp";
 	addAndMakeVisible(vol3);
 	vol3.setLookAndFeel(&otherLookAndFeel);
 	
@@ -64,6 +67,7 @@ MainComponent::MainComponent() : seqPanel(getLookAndFeel().findColour(ResizableW
 	vol4.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 	vol4.addListener(this);
 	vol4.synth = "cb";
+	vol4.addr = "/amp";
 	addAndMakeVisible(vol4);
 	vol4.setLookAndFeel(&otherLookAndFeel);
 
@@ -73,6 +77,7 @@ MainComponent::MainComponent() : seqPanel(getLookAndFeel().findColour(ResizableW
 	vol5.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 	vol5.addListener(this);
 	vol5.synth = "kc";
+	vol5.addr = "/amp";
 	addAndMakeVisible(vol5);
 	vol5.setLookAndFeel(&otherLookAndFeel);
 
@@ -82,6 +87,7 @@ MainComponent::MainComponent() : seqPanel(getLookAndFeel().findColour(ResizableW
 	vol6.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 	vol6.addListener(this);
 	vol6.synth = "fm";
+	vol6.addr = "/amp";
 	addAndMakeVisible(vol6);
 	vol6.setLookAndFeel(&otherLookAndFeel);
 
@@ -91,6 +97,7 @@ MainComponent::MainComponent() : seqPanel(getLookAndFeel().findColour(ResizableW
 	vol7.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 	vol7.addListener(this);
 	vol7.synth = "ce";
+	vol7.addr = "/amp";
 	addAndMakeVisible(vol7);
 	vol7.setLookAndFeel(&otherLookAndFeel);
 
@@ -100,48 +107,89 @@ MainComponent::MainComponent() : seqPanel(getLookAndFeel().findColour(ResizableW
 	vol8.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 	vol8.addListener(this);
 	vol8.synth = "tom";
+	vol8.addr = "/amp";
 	addAndMakeVisible(vol8);
 	vol8.setLookAndFeel(&otherLookAndFeel);
 
 	//Other SLiders
+	slid1.setRange(0.0, 1.0, 0.01);
+	slid1.setValue(0.5);
 	slid1.setSliderStyle(Slider::SliderStyle::Rotary);
 	slid1.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 	addAndMakeVisible(slid1);
+	slid1.addListener(this);
+	slid1.synth = "bd";
+	slid1.addr = "/kickLev";
 	slid1.setLookAndFeel(&otherLookAndFeel);
 
+	slid2.setRange(0.0, 1.0, 0.01);
+	slid2.setValue(0.5);
 	slid2.setSliderStyle(Slider::SliderStyle::Rotary);
 	slid2.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 	addAndMakeVisible(slid2);
+	slid2.addListener(this);
+	slid2.synth = "hh";
+	slid2.addr = "/q";
 	slid2.setLookAndFeel(&otherLookAndFeel);
 
+	slid3.setRange(0.0, 1.0, 0.01);
+	slid3.setValue(0.5);
 	slid3.setSliderStyle(Slider::SliderStyle::Rotary);
 	slid3.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 	addAndMakeVisible(slid3);
+	slid3.addListener(this);
+	slid3.synth = "sn";
+	slid3.addr = "/sinFreq";
 	slid3.setLookAndFeel(&otherLookAndFeel);
 
+	slid4.setRange(0.0, 1.0, 0.01);
+	slid4.setValue(0.5);
 	slid4.setSliderStyle(Slider::SliderStyle::Rotary);
 	slid4.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 	addAndMakeVisible(slid4);
+	slid4.addListener(this);
+	slid4.synth = "cb";
+	slid4.addr = "/fundFreq";
 	slid4.setLookAndFeel(&otherLookAndFeel);
 
+	slid5.setRange(0.0, 1.0, 0.01);
+	slid5.setValue(0.5);
 	slid5.setSliderStyle(Slider::SliderStyle::Rotary);
 	slid5.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 	addAndMakeVisible(slid5);
+	slid5.addListener(this);
+	slid5.synth = "kc";
+	slid5.addr = "/startFreq";
 	slid5.setLookAndFeel(&otherLookAndFeel);
 
+	slid6.setRange(0.0, 1.0, 0.01);
+	slid6.setValue(0.5);
 	slid6.setSliderStyle(Slider::SliderStyle::Rotary);
 	slid6.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 	addAndMakeVisible(slid6);
+	slid6.addListener(this);
+	slid6.synth = "fm";
+	slid6.addr = "/fcFreq";
 	slid6.setLookAndFeel(&otherLookAndFeel);
 
+	slid7.setRange(0.0, 1.0, 0.01);
+	slid7.setValue(0.5);
 	slid7.setSliderStyle(Slider::SliderStyle::Rotary);
 	slid7.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 	addAndMakeVisible(slid7);
+	slid7.addListener(this);
+	slid7.synth = "ce";
+	slid7.addr = "/valueFreq";
 	slid7.setLookAndFeel(&otherLookAndFeel);
 
+	slid8.setRange(0.0, 1.0, 0.01);
+	slid8.setValue(0.5);
 	slid8.setSliderStyle(Slider::SliderStyle::Rotary);
 	slid8.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 	addAndMakeVisible(slid8);
+	slid8.addListener(this);
+	slid8.synth = "tom";
+	slid8.addr = "/startPitch";
 	slid8.setLookAndFeel(&otherLookAndFeel);
 
 	//Other Elements
@@ -163,24 +211,44 @@ MainComponent::MainComponent() : seqPanel(getLookAndFeel().findColour(ResizableW
 	addAndMakeVisible(instrumentSelector);
 	instrumentSelector.setLookAndFeel(&otherLookAndFeel);
 
+	slid9.setRange(0.0, 1.0, 0.01);
+	slid9.setValue(0.5);
 	addAndMakeVisible(slid9);
 	slid9.setSliderStyle(Slider::SliderStyle::Rotary);
 	slid9.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+	slid9.addListener(this);
+	slid9.synth = "bd";
+	slid9.addr = "/start";
 	slid9.setLookAndFeel(&otherLookAndFeel);
 
+	slid10.setRange(0.0, 1.0, 0.01);
+	slid10.setValue(0.5);
 	addAndMakeVisible(slid10);
 	slid10.setSliderStyle(Slider::SliderStyle::Rotary);
 	slid10.setLookAndFeel(&otherLookAndFeel);
+	slid10.addListener(this);
+	slid10.synth = "hh";
+	slid10.addr = "/hh/ffreq";
 	slid10.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 
+	slid11.setRange(0.0, 1.0, 0.01);
+	slid11.setValue(0.5);
 	addAndMakeVisible(slid11);
 	slid11.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 	slid11.setLookAndFeel(&otherLookAndFeel);
+	slid11.addListener(this);
+	slid11.synth = "sn";
+	slid11.addr = "/sn/ffreq";
 	slid11.setSliderStyle(Slider::SliderStyle::Rotary);
 
+	slid12.setRange(0.0, 1.0, 0.01);
+	slid12.setValue(0.5);
 	addAndMakeVisible(slid12);
 	slid12.setSliderStyle(Slider::SliderStyle::Rotary);
 	slid12.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+	slid12.addListener(this);
+	slid12.synth = "tom";
+	slid12.addr = "/pitchRel";
 	slid12.setLookAndFeel(&otherLookAndFeel);
 
 	//Label
@@ -319,28 +387,12 @@ void MainComponent::resized()
 	Rectangle <int> areaPippoliBonus = thirdRow.removeFromRight((thirdRow.getWidth() / 5) * 4);
 	Rectangle <int> areaButtons = fourthRow.removeFromRight((fourthRow.getWidth() / 5) * 4);
 
-	/*Rectangle <int> up = area.removeFromTop((area.getHeight()/4));
-	Rectangle <int> center1 = area.removeFromTop((area.getHeight() / 4) * 1);
-	Rectangle <int> center2 = area.removeFromTop((area.getHeight() / 4) * 1);
-	Rectangle <int> center3 = area.removeFromTop((area.getHeight() / 4));
-	Rectangle <int> bottom = area.removeFromTop(area.getHeight()/ 4);
-
-	Rectangle <int> areaVolumeSliders = up.removeFromRight((getWidth() / 10) * 8);
-	Rectangle <int> areaOtherSliders = center1.removeFromRight((getWidth() / 10) * 8);
-	Rectangle <int> areaPippoliBonus = center2.removeFromRight((getWidth() / 10) * 8);
-	Rectangle <int> areaButtons = bottom.removeFromRight((getWidth() / 10) * 8);*/
+	
 
 	//Buttons
 	int xButton = areaButtons.getWidth() / 8;
-	int xspace = areaButtons.getWidth() / 20;/*
-	butt1.setBounds(areaButtons.removeFromLeft(xButton));
-	butt2.setBounds(areaButtons.removeFromLeft(xButton));
-	butt3.setBounds(areaButtons.removeFromLeft(xButton));
-	butt4.setBounds(areaButtons.removeFromLeft(xButton));
-	butt5.setBounds(areaButtons.removeFromLeft(xButton));
-	butt6.setBounds(areaButtons.removeFromLeft(xButton));
-	butt7.setBounds(areaButtons.removeFromLeft(xButton));
-	butt8.setBounds(areaButtons.removeFromLeft(xButton));*/
+	int xspace = areaButtons.getWidth() / 20;
+	
 
 	//Volume Sliders
 	int xSlider = areaVolumeSliders.getWidth() / 8;
@@ -364,7 +416,7 @@ void MainComponent::resized()
 	slid7.setBounds(areaOtherSliders.removeFromLeft(xOtherSlider));
 	slid8.setBounds(areaOtherSliders.removeFromLeft(xOtherSlider));
 
-	//Ohter elemets
+	//Other elements
 	startStopButton.setBounds(fourthRow.removeFromLeft(area.getWidth() / 5));
 	Rectangle<int> tempoSliderRect = firstRow.removeFromLeft(area.getWidth() / 5);
 	tempoSlider.setBounds(tempoSliderRect);
@@ -412,12 +464,19 @@ void MainComponent::resized()
 
 void MainComponent::sendVolume(MySlider *slider)
 {	 
-	float volume = slider->getValue();
-	sender.send("/amp" , volume, slider->synth);
+	float value = slider->getValue();
+	bool sent = sender.send(slider->addr , value, slider->synth);
+	if (sent)
+	{
+		Logger::outputDebugString("Message sent!");
+		Logger::outputDebugString(slider->addr);
+		Logger::outputDebugString((String)value);
+	} 
 }
 
 void MainComponent::sliderValueChanged(Slider *slider)
 {	
 	//sendVolume(slider->getValue(), slider->synth );
 	sendVolume((MySlider*)slider);
+	Logger::outputDebugString("Value changed!");
 }

@@ -714,7 +714,7 @@ midiJUCE.postln;
 (
 OSCdef(\volume,{
 	arg msg, time, addr, port;
-	var vol, synth, x;
+	var vol, synth;
 	vol = msg[1];
 	synth = msg[2];
 	switch(synth,
@@ -731,6 +731,127 @@ OSCdef(\volume,{
 '/amp'
 );
 )
+
+//bd L1 parameter
+(
+OSCdef(\bd_L1,{
+	arg msg, time, addr, port;
+	~l1_temp =  msg[1].linlin(0, 1, 0, 2.5);
+},
+'/kickLev'
+);
+)
+
+//bd start parameter
+(
+OSCdef(\bd_start,{
+	arg msg, time, addr, port;
+	~start_temp = msg[1].linlin(0, 1, 0, 500);
+},
+'/start'
+);
+)
+
+//hh Q parameter
+(
+OSCdef(\hh_Q,{
+	arg msg, time, addr, port;
+	~q_temp = msg[1].linlin(0, 1, 0, 5);
+},
+'/q'
+);
+)
+
+//hh ffreq parameter
+(
+OSCdef(\hh_ffreq,{
+	arg msg, time, addr, port;
+	~ffreq_hh_temp = msg[1].linlin(0, 1, 100, 15000);
+},
+'/hh/ffreq'
+);
+)
+
+//sn sinFreq parameter
+(
+OSCdef(\sn_sinFreq,{
+	arg msg, time, addr, port;
+	~sinfreq_temp = msg[1].linlin(0, 1, 0, 1000);
+},
+'/sinFreq'
+);
+)
+
+//sn ffreq parameter
+(
+OSCdef(\sn_ffreq,{
+	arg msg, time, addr, port;
+	~ffreq_sn_temp = msg[1].linlin(0, 1, 100, 5000);
+},
+'/sn/ffreq'
+);
+)
+
+//cb fundFreq parameter
+(
+OSCdef(\cb_fundFreq,{
+	arg msg, time, addr, port;
+	~fundfreq_temp = msg[1].linlin(0, 1, 30, 1000);
+},
+'/fundFreq'
+);
+)
+
+//kc startFreq parameter
+(
+OSCdef(\kc_startFreq,{
+	arg msg, time, addr, port;
+	~start_temp = msg[1].linlin(0, 1, 40, 2000);;
+},
+'/startFreq'
+);
+)
+
+//fm fcFreq parameter
+(
+OSCdef(\fm_fcFreq,{
+	arg msg, time, addr, port;
+	~fc_temp = msg[1].linlin(0, 1, 200, 2500);
+},
+'/fcFreq'
+);
+)
+
+//ce valueFreq parameter
+(
+OSCdef(\ce_valueFreq,{
+	arg msg, time, addr, port;
+	~value_temp = msg[1].linlin(0, 1, 200, 9000);
+},
+'/valueFreq'
+);
+)
+
+//tom startPitch parameter
+(
+OSCdef(\tom_startPitch,{
+	arg msg, time, addr, port;
+	~startPitch_temp = msg[1].linlin(0, 1, 100, 3000);
+},
+'/startPitch'
+);
+)
+
+//tom pitchRel parameter
+(
+OSCdef(\tom_pitchRel,{
+	arg msg, time, addr, port;
+	~pitchRel_temp = msg[1].linlin(0, 1, 0, 1);
+},
+'/pitchRel'
+);
+)
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

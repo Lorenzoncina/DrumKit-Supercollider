@@ -103,7 +103,7 @@ private:
 	TextButton butt1, butt2, butt3, butt4, butt5, butt6, butt7, butt8;
 	MySlider vol1, vol2, vol3, vol4, vol5, vol6, vol7, vol8;
 
-	Slider slid1, slid2, slid3, slid4, slid5, slid6, slid7, slid8;
+	MySlider slid1, slid2, slid3, slid4, slid5, slid6, slid7, slid8;
 
 	TextButton startStopButton;
 	Slider tempoSlider, instrumentSelector;
