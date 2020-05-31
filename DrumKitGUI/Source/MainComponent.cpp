@@ -9,19 +9,23 @@
 #include "MainComponent.h"
 
 //==============================================================================
-MainComponent::MainComponent()
+MainComponent::MainComponent() : seqPanel(getLookAndFeel().findColour(ResizableWindow::backgroundColourId), &sender)
 {
     setSize (600, 450);
 	sender.connect("127.0.0.1", 57120);
+
+	addAndMakeVisible(seqPanel);
+	
 	//Buttons
-	addAndMakeVisible(butt1);
+	/*addAndMakeVisible(butt1);
 	addAndMakeVisible(butt2);
 	addAndMakeVisible(butt3);
 	addAndMakeVisible(butt4);
 	addAndMakeVisible(butt5);
 	addAndMakeVisible(butt6);
 	addAndMakeVisible(butt7);
-	addAndMakeVisible(butt8);
+	addAndMakeVisible(butt8);*/
+	
 
 	//Volume Sliders
 	vol1.setRange(0.0,1.0,0.01);
@@ -126,9 +130,9 @@ MainComponent::MainComponent()
 	startStopButton.setButtonText("Start/Stop");
 	addAndMakeVisible(startStopButton);
 
-	tempoSlider.setRange(1.0,10.0,1.0);
+	tempoSlider.setRange(50.0,180.0,1.0);
 	tempoSlider.setSliderStyle(Slider::SliderStyle::Rotary);
-	tempoSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+	tempoSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxBelow, true, 30, 15);
 	addAndMakeVisible(tempoSlider);
 
 	tempoLabel.setText("Tempo", dontSendNotification);
@@ -136,7 +140,7 @@ MainComponent::MainComponent()
 
 	instrumentSelector.setRange(1.0, 8.0, 1.0);
 	instrumentSelector.setSliderStyle(Slider::SliderStyle::Rotary);
-	instrumentSelector.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+	instrumentSelector.setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxBelow, true, 30, 15);
 	addAndMakeVisible(instrumentSelector);
 
 	addAndMakeVisible(slid9);
@@ -148,7 +152,9 @@ MainComponent::MainComponent()
 	addAndMakeVisible(slid11);
 	slid11.setSliderStyle(Slider::SliderStyle::Rotary);
 	slid11.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
-
+	addAndMakeVisible(slid12);
+	slid12.setSliderStyle(Slider::SliderStyle::Rotary);
+	slid12.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
 
 }
 
@@ -171,20 +177,34 @@ void MainComponent::resized()
 {
 
 	Rectangle <int> area = getLocalBounds();
-	Rectangle <int> up = area.removeFromTop((area.getHeight()/4));
-	Rectangle <int> center1 = area.removeFromTop((area.getHeight() / 4) * 2);
-	Rectangle <int> center2 = area.removeFromTop((area.getHeight() / 4) * 2);
-	Rectangle <int> center3 = area.removeFromTop((area.getHeight() / 8) * 6);
-	Rectangle <int> bottom = area.removeFromBottom(area.getHeight()/ 8);
+	Rectangle <int> upperPanel = area.removeFromTop(getHeight() / 2);
+	Rectangle <int> lowerPanel = area.removeFromBottom(getHeight() / 2);
 
-	Rectangle <int> areaButtons = center3.removeFromRight((getWidth() / 10) * 8);
+	Rectangle <int> firstRow = upperPanel.removeFromTop(upperPanel.getHeight() / 2);
+	Rectangle <int> secondRow = upperPanel.removeFromBottom(upperPanel.getHeight() / 1);
+
+	Rectangle <int> thirdRow = lowerPanel.removeFromTop(lowerPanel.getHeight() / 2);
+	Rectangle  <int> fourthRow = lowerPanel.removeFromBottom(lowerPanel.getHeight() / 1);
+
+	Rectangle <int> areaVolumeSliders = firstRow.removeFromRight((firstRow.getWidth() / 5) * 4);
+	Rectangle <int> areaOtherSliders = secondRow.removeFromRight((secondRow.getWidth() / 5) * 4);
+	Rectangle <int> areaPippoliBonus = thirdRow.removeFromRight((thirdRow.getWidth() / 5) * 4);
+	Rectangle <int> areaButtons = fourthRow.removeFromRight((fourthRow.getWidth() / 5) * 4);
+
+	/*Rectangle <int> up = area.removeFromTop((area.getHeight()/4));
+	Rectangle <int> center1 = area.removeFromTop((area.getHeight() / 4) * 1);
+	Rectangle <int> center2 = area.removeFromTop((area.getHeight() / 4) * 1);
+	Rectangle <int> center3 = area.removeFromTop((area.getHeight() / 4));
+	Rectangle <int> bottom = area.removeFromTop(area.getHeight()/ 4);
+
 	Rectangle <int> areaVolumeSliders = up.removeFromRight((getWidth() / 10) * 8);
 	Rectangle <int> areaOtherSliders = center1.removeFromRight((getWidth() / 10) * 8);
 	Rectangle <int> areaPippoliBonus = center2.removeFromRight((getWidth() / 10) * 8);
+	Rectangle <int> areaButtons = bottom.removeFromRight((getWidth() / 10) * 8);*/
 
 	//Buttons
 	int xButton = areaButtons.getWidth() / 8;
-	int xspace = areaButtons.getWidth() / 20;
+	int xspace = areaButtons.getWidth() / 20;/*
 	butt1.setBounds(areaButtons.removeFromLeft(xButton));
 	butt2.setBounds(areaButtons.removeFromLeft(xButton));
 	butt3.setBounds(areaButtons.removeFromLeft(xButton));
@@ -192,7 +212,7 @@ void MainComponent::resized()
 	butt5.setBounds(areaButtons.removeFromLeft(xButton));
 	butt6.setBounds(areaButtons.removeFromLeft(xButton));
 	butt7.setBounds(areaButtons.removeFromLeft(xButton));
-	butt8.setBounds(areaButtons.removeFromLeft(xButton));
+	butt8.setBounds(areaButtons.removeFromLeft(xButton));*/
 
 	//Volume Sliders
 	int xSlider = areaVolumeSliders.getWidth() / 8;
@@ -217,18 +237,21 @@ void MainComponent::resized()
 	slid8.setBounds(areaOtherSliders.removeFromLeft(xOtherSlider));
 
 	//Ohter elemets
-	startStopButton.setBounds(center2.removeFromLeft(getWidth() / 7));
-	Rectangle<int> tempoSliderRect = center1.removeFromLeft(getWidth() / 7);
+	startStopButton.setBounds(fourthRow.removeFromLeft(area.getWidth() / 5));
+	Rectangle<int> tempoSliderRect = firstRow.removeFromLeft(area.getWidth() / 5);
 	tempoSlider.setBounds(tempoSliderRect);
-	tempoLabel.setBounds(tempoSliderRect.removeFromBottom(getHeight()/3.5));
+	//tempoLabel.setBounds(tempoSliderRect.removeFromBottom(getHeight()/3.5));
 
-	Rectangle<int> instrumentSelectorRect = up.removeFromLeft(getWidth() / 7);
+	Rectangle<int> instrumentSelectorRect = secondRow.removeFromLeft(area.getWidth() / 5);
 	instrumentSelector.setBounds(instrumentSelectorRect);
 
 	//Pippoli bonus
 	slid9.setBounds(areaPippoliBonus.removeFromLeft(xButton));
 	slid10.setBounds(areaPippoliBonus.removeFromLeft(xButton));
 	slid11.setBounds(areaPippoliBonus.removeFromLeft(xButton));
+	slid12.setBounds(areaPippoliBonus.removeFromRight(xButton));
+
+	seqPanel.setBounds(areaButtons);
 }
 
 
