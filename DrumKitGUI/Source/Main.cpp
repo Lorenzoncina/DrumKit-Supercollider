@@ -18,6 +18,8 @@ public:
     //==============================================================================
     DrumKitGUIApplication() {}
 
+	
+
     const String getApplicationName() override       { return ProjectInfo::projectName; }
     const String getApplicationVersion() override    { return ProjectInfo::versionString; }
     bool moreThanOneInstanceAllowed() override       { return true; }
@@ -71,7 +73,7 @@ public:
            #if JUCE_IOS || JUCE_ANDROID
             setFullScreen (true);
            #else
-            setResizable (true, true);
+            setResizable (false, false);
             centreWithSize (getWidth(), getHeight());
            #endif
 

@@ -7,6 +7,8 @@
       <FILE id="uoetRE" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
       <FILE id="lK0kMt" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="dpFdu4" name="OtherLookAndFeel.h" compile="0" resource="0"
+            file="Source/OtherLookAndFeel.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
