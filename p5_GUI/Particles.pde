@@ -46,8 +46,6 @@ class ParticleSystem {
   }
 }
 
-
-
 // A subclass of Particle
 
 class CrazyParticle extends Particle {
@@ -75,13 +73,13 @@ class CrazyParticle extends Particle {
 
   // This display() method overrides the parent class display() method
   void display() {
-    // Render the ellipse just like in a regular particle
+    // Render 
     super.display();
-    // Then add a rotating line
+    // add a rotating line
     pushMatrix();
     translate(position.x, position.y);
     rotate(theta);
-    stroke(255, lifespan);
+    stroke(#FAF184, lifespan);
     line(0, 0, 2, 0);
     popMatrix();
   }
@@ -98,7 +96,7 @@ class Particle {
 
   Particle(PVector l) {
     acceleration = new PVector(0, 0.05);//0.05
-    velocity = new PVector(random(-2, 2), random(-2, 0));
+    velocity = new PVector(random(-3, 3), random(-2, 0));
     position = l.copy();
     lifespan = 255.0;
   }
@@ -119,8 +117,8 @@ class Particle {
   void display() {
     //#F9BC45,#FAF184
     //#4C139D#58C4F0
-    stroke(#F9BC45, lifespan-60); //darker stroke
-    fill(#FAF184, lifespan-60);// brighter filling color
+    stroke(#F8ECF2, lifespan-60); //darker stroke
+    fill(#FBB8B8, lifespan-60);// brighter filling color
     ellipse(position.x, position.y, 5, 5);
   }
 

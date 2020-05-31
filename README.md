@@ -16,6 +16,10 @@ Processing, JUCE to turn other devices (e.g., Arduino, Kinect, etc.) into input 
 Be creative, feel free to combine different components for visualization, user interaction and
 control.
 
+## System Design
+![System Diagram](docs/images/flow.png)
+
+
 ## Output:
 - A brief presentation and demonstration of your work (max 5 minutes) that will be
 given to the class.
@@ -23,11 +27,3 @@ given to the class.
 (max 5 pages).
 - A link to a repository containing the code (e.g. on GitHub) with minimal comments.
 
-## TimeLine
-The deadlines for the homework 3 are as follows:
-
-- June 1st: groups are expected to upload on Beep a detailed report on the project (max 8 pages) on a prescribed Beep folder, to be communicated shortly. The reports will be made available also to the other students. Due to the GDPR regulation, please do not include in the report the names of the group components, but only the personal codes. You can also choose a name of your preference for the group, which is for now only a number (1...18).
-Important note: based on the report, a grade will be assigned based on: a) the originality of the proposed solution and b) the quality of the implementation, for a total of 8/3 (2.66) points.
-
-- June 3rd: public presentation of the assignments during the usual class time, using a PPT presentation. Due to the limited time, all presentations are expected must last no more than 5 minutes.
-Important note: based on the presentation, a gtade of max 4/3 (1.33) points will be assigned.
