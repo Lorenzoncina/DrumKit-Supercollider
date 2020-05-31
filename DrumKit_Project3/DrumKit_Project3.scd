@@ -7,9 +7,9 @@ s.boot;
 ////////////////////////////////////////////////////////--- SYNTH BANK ---/////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-(
-// --- bass drum --- //
 
+// --- bass drum --- //
+(
 SynthDef.new("bd", {
     arg  n=0.76966457366943, nl = 0.016062397956848, start=63.017123937607, end=1, l1=0.094613754749298, l2=0.72694784402847, exp=2, amp=0.1;
     var boom;
@@ -329,46 +329,101 @@ s.meter;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 (
-var bd, hh, sn, cb, kc, fm, ce, tom, t, min, max;
+var bd, hh, sn, cb, kc, fm, ce, tom, knob_names, buttons4keys;
 var bd_knobs, hh_knobs, sn_knobs, cb_knobs, kc_knobs, fm_knobs, ce_knobs, tom_knobs;
 ~l1_temp; ~start_temp; ~amp_bd_temp; ~q_temp; ~ffreq_hh_temp; ~amp_hh_temp; ~sinfreq_temp; ~ffreq_sn_temp; ~amp_sn_temp;
- ~fundfreq_temp; ~amp_cb_temp; ~start_temp; ~amp_kc_temp; ~fc_temp; ~amp_fm_temp; ~value_temp;
-~amp_clap_e_temp; ~pitchRel_temp; ~startPitch_temp; ~amp_tom_temp;
-w = Window.new(name: "DRUM KIT", bounds:Rect(100,300,800,400)).front;
-bd = Button.new(w,Rect(10,10,80,80));
+~sinfreq_temp; ~fundfreq_temp; ~amp_cb_temp; ~start_temp; ~amp_kc_temp; ~fc_temp; ~amp_fm_temp; ~value_temp;
+~amp_clap_e_temp; ~pitchRel_temp; ~startPitch_temp; ~amp_tom_temp; ~keys2synth;
+
+
+knob_names = Array2D.new(8, 3);
+buttons4keys = Array.newClear(8);
+~keys2synth = Array.newClear(8);
+
+w = Window.new(name: "DRUM KIT", bounds:Rect(100,220,810,500)).front;
+
+
+
+///////////////////////////////////// bass drum ///////////////////////////////////////
+bd = Button.new(w,Rect(15,10,80,80));
 bd.string = "bass drum";
-hh = Button.new(w,Rect(110,10,80,80));
-hh.string = "hi-hat";
-sn = Button.new(w,Rect(210,10,80,80));
-sn.string = "snare";
-cb = Button.new(w,Rect(310,10,80,80));
-cb.string = "cowbell";
-kc = Button.new(w,Rect(410,10,80,80));
-kc.string = "kick";
-fm = Button.new(w,Rect(510,10,80,80));
-fm.string = "fm";
-ce = Button.new(w,Rect(610,10,80,80));
-ce.string = "clap electro";
-tom = Button.new(w,Rect(710,10,80,80));
-tom.string = "tom";
+buttons4keys[0] = Button.new(w,Rect(15,400,80,80));
+buttons4keys[0].string = "assign";
 
+buttons4keys[0].mouseDownAction = {
+	v = Window.new(name: "press a key to save it", bounds:Rect(500, 500,500,100)).front;
+	t = StaticText(v,Rect(200,10,500,50)).string_("BASS DRUM");
+	v.view.keyDownAction = {
+		arg view, char, modifiers, unicode, keycode;
+		[char, keycode].postln;
+		~keys2synth[0] = keycode;
+		};
+};
 
-//t = StaticText(w,Rect(100,10,90,30)).string_("Button released"); //okay i found the text boxes, tomorrow i'll fix them
-//i still have to add "press a key ti assiciate it with a synth"
+w.view.keyDownAction = {
+	arg view, char, modifiers, unicode, keycode;
+	var bass_drum;
 
-//use knobs to modify synth values, map 0->1 to min_value->max_value
+	if(keycode == ~keys2synth[0]){
+		bass_drum = Synth(\bd, [\l1,~l1_temp, \start, ~start_temp, \amp, ~amp_bd_temp]);
+	}
+
+};
 
 bd.mouseDownAction = {
 	var bass_drum;
 	bass_drum = Synth(\bd, [\l1,~l1_temp, \start, ~start_temp, \amp, ~amp_bd_temp]);
 };
-bd_knobs = Array.newClear(2); //number of paramters = number of knobs
+bd_knobs = Array.newClear(3);
+
 bd_knobs[0] = Knob(w,Rect(15,100,80,80));
-bd_knobs[0].action = {~l1_temp = bd_knobs[0].value.linlin(0, 1, 0, 2.5)}; // set min, max
+bd_knobs[0].value = 0.094/2.5; //from the proportion: x/1 = 0.094/2.5
+bd_knobs[0].action = {~l1_temp = bd_knobs[0].value.linlin(0, 1, 0, 2.5);
+						postln(~l1_temp);
+					};
+knob_names[0,0] =  StaticText(w,Rect(50,170,90,30)).string_("L 1");
+
 bd_knobs[1] = Knob(w,Rect(15,200,80,80));
-bd_knobs[1].action = {~start_temp = bd_knobs[1].value.linlin(0, 1, 0, 500)};
+bd_knobs[1].value = 63/500;
+bd_knobs[1].action = {~start_temp = bd_knobs[1].value.linlin(0, 1, 0, 500);
+						postln(~start_temp);
+					};
+knob_names[0,1] =  StaticText(w,Rect(45,170+100,90,30)).string_("START");
+
+bd_knobs[2] = Knob(w,Rect(15,300,80,80));
+bd_knobs[2].value = 0.1/3;
+bd_knobs[2].action = {~amp_bd_temp = bd_knobs[2].value.linexp(0, 1, 0.01, 3);
+						postln(~amp_bd_temp);
+					};
+knob_names[0,2] =  StaticText(w,Rect(45,170+200,90,30)).string_("AMP");
 
 
+///////////////////////////////////// hit hat ///////////////////////////////////////
+hh = Button.new(w,Rect(115,10,80,80));
+hh.string = "hi-hat";
+buttons4keys[1] = Button.new(w,Rect(115,400,80,80));
+buttons4keys[1].string = "assign";
+
+
+buttons4keys[1].mouseDownAction = {
+	v = Window.new(name: "press a key to save it", bounds:Rect(500, 500,500,100)).front;
+	t = StaticText(v,Rect(200,10,500,50)).string_("HIT HAT");
+	v.view.keyDownAction = {
+		arg view, char, modifiers, unicode, keycode;
+		[char, keycode].postln;
+		~keys2synth[1] = keycode;
+		};
+};
+
+w.view.keyDownAction = {
+	arg view, char, modifiers, unicode, keycode;
+	var hit_hat;
+
+	if(keycode == ~keys2synth[1]){
+		hit_hat = Synth(\hh, [\q, ~q_temp, \ffreq, ~ffreq_hh_temp, \amp, ~amp_hh_temp]);
+	}
+
+};
 
 
 hh.mouseDownAction = {
@@ -376,15 +431,57 @@ hh.mouseDownAction = {
 	hit_hat = Synth(\hh, [\q, ~q_temp, \ffreq, ~ffreq_hh_temp, \amp, ~amp_hh_temp]);
 };
 hh_knobs = Array.newClear(3);
+
 hh_knobs[0] = Knob(w,Rect(115,100,80,80));
-hh_knobs[0].action = {~q_temp = hh_knobs[0].value.linlin(0, 1, 0, 5)}; //changes the bandwidth of the noiseOsc
+hh_knobs[0].value = 0.59/5;
+hh_knobs[0].action = {~q_temp = hh_knobs[0].value.linlin(0, 1, 0, 5);
+						postln(~q_temp);
+					}; //changes the bandwidth of the noiseOsc
+knob_names[1,0] =  StaticText(w,Rect(50+100,170,90,30)).string_("Q");
+
 hh_knobs[1] = Knob(w,Rect(115,200,80,80));
-hh_knobs[1].action = {~ffreq_hh_temp = hh_knobs[1].value.linlin(0, 1, 100, 15000)};
+hh_knobs[1].value = 9853/15000;
+hh_knobs[1].action = {~ffreq_hh_temp = hh_knobs[1].value.linlin(0, 1, 100, 15000);
+						postln(~ffreq_hh_temp);
+					};
+knob_names[1,1] =  StaticText(w,Rect(45+100,170+100,90,30)).string_("F FREQ");
+
 hh_knobs[2] = Knob(w,Rect(115,300,80,80));
-hh_knobs[2].action = {~amp_hh_temp = hh_knobs[2].value.linexp(0, 1, 0.01, 3)};
+hh_knobs[2].value = 0.3/3;
+hh_knobs[2].action = {~amp_hh_temp = hh_knobs[2].value.linexp(0, 1, 0.01, 3);
+						postln(~amp_hh_temp);
+					};
+knob_names[1,2] =  StaticText(w,Rect(50+100,170+200,90,30)).string_("AMP");
 
 
 
+
+///////////////////////////////////// snare ///////////////////////////////////////
+sn = Button.new(w,Rect(215,10,80,80));
+sn.string = "snare";
+buttons4keys[2] = Button.new(w,Rect(215,400,80,80));
+buttons4keys[2].string = "assign";
+
+
+buttons4keys[2].mouseDownAction = {
+	v = Window.new(name: "press a key to save it", bounds:Rect(500, 500,500,100)).front;
+	t = StaticText(v,Rect(200,10,500,50)).string_("SNARE");
+	v.view.keyDownAction = {
+		arg view, char, modifiers, unicode, keycode;
+		[char, keycode].postln;
+		~keys2synth[2] = keycode;
+		};
+};
+
+w.view.keyDownAction = {
+	arg view, char, modifiers, unicode, keycode;
+	var snare;
+
+	if(keycode == ~keys2synth[2]){
+		snare = Synth(\sn, [\sinfreq, ~sinfreq_temp, \ffreq, ~ffreq_sn_temp, \amp, ~amp_sn_temp]);
+	}
+
+};
 
 
 sn.mouseDownAction = {
@@ -392,14 +489,56 @@ sn.mouseDownAction = {
 	snare = Synth(\sn, [\sinfreq, ~sinfreq_temp, \ffreq, ~ffreq_sn_temp, \amp, ~amp_sn_temp ]);
 };
 sn_knobs = Array.newClear(3);
+
 sn_knobs[0] = Knob(w,Rect(215,100,80,80));
-sn_knobs[0].action = {~sinfreq_temp = sn_knobs[0].value.linlin(0, 1, 0, 1000)};
+sn_knobs[0].value = 180/1000;
+sn_knobs[0].action = {~sinfreq_temp = sn_knobs[0].value.linlin(0, 1, 0, 1000);
+						postln(~sinfreq_temp);
+					};
+knob_names[2,0] =  StaticText(w,Rect(30+200,170,90,30)).string_("SIN FREQ");
+
 sn_knobs[1] = Knob(w,Rect(215,200,80,80));
-sn_knobs[1].action = {~ffreq_sn_temp = sn_knobs[1].value.linlin(0, 1, 100, 5000)};
+sn_knobs[1].value = 2000/5000;
+sn_knobs[1].action = {~ffreq_sn_temp = sn_knobs[1].value.linlin(0, 1, 100, 5000);
+						postln(~ffreq_sn_temp);
+					};
+knob_names[2,1] =  StaticText(w,Rect(45+200,170+100,90,30)).string_("F FREQ");
+
 sn_knobs[2] = Knob(w,Rect(215,300,80,80));
-sn_knobs[2].action = {~amp_sn_temp = sn_knobs[2].value.linexp(0, 1, 0.01, 2)};
+sn_knobs[2].value = 0.1/2;
+sn_knobs[2].action = {~amp_sn_temp = sn_knobs[2].value.linexp(0, 1, 0.01, 2);
+						postln(~amp_sn_temp);
+					};
+knob_names[2,2] =  StaticText(w,Rect(50+200,170+200,90,30)).string_("AMP");
 
 
+
+///////////////////////////////////// cowbell ///////////////////////////////////////
+cb = Button.new(w,Rect(315,10,80,80));
+cb.string = "cowbell";
+buttons4keys[3] = Button.new(w,Rect(315,400,80,80));
+buttons4keys[3].string = "assign";
+
+
+buttons4keys[3].mouseDownAction = {
+	v = Window.new(name: "press a key to save it", bounds:Rect(500, 500,500,100)).front;
+	t = StaticText(v,Rect(200,10,500,50)).string_("COWBELL");
+	v.view.keyDownAction = {
+		arg view, char, modifiers, unicode, keycode;
+		[char, keycode].postln;
+		~keys2synth[3] = keycode;
+		};
+};
+
+w.view.keyDownAction = {
+	arg view, char, modifiers, unicode, keycode;
+	var cowbell;
+
+	if(keycode == ~keys2synth[3]){
+		cowbell = Synth(\cb, [\fund_freq, ~fundfreq_temp, \amp, ~amp_cb_temp]);
+	}
+
+};
 
 
 cb.mouseDownAction = {
@@ -407,12 +546,49 @@ cb.mouseDownAction = {
 	cowbell = Synth(\cb, [\fund_freq, ~fundfreq_temp, \amp, ~amp_cb_temp]);
 };
 cb_knobs = Array.newClear(2);
+
 cb_knobs[0] = Knob(w,Rect(315,100,80,80));
-cb_knobs[0].action = {~fundfreq_temp = cb_knobs[0].value.linlin(0, 1, 30, 1000)};
-cb_knobs[1] = Knob(w,Rect(315,200,80,80));
-cb_knobs[1].action = {~amp_cb_temp = cb_knobs[1].value.linexp(0, 1, 0.01, 3)};
+cb_knobs[0].value = 540/1000;
+cb_knobs[0].action = {~fundfreq_temp = cb_knobs[0].value.linlin(0, 1, 30, 1000);
+						postln(~fundfreq_temp);
+					};
+knob_names[3,0] =  StaticText(w,Rect(30+300,170,90,30)).string_("FUND FREQ");
+
+cb_knobs[1] = Knob(w,Rect(315,300,80,80));
+cb_knobs[1].value = 0.3/3;
+cb_knobs[1].action = {~amp_cb_temp = cb_knobs[1].value.linexp(0, 1, 0.01, 3);
+						postln(~amp_cb_temp);
+					};
+knob_names[3,1] =  StaticText(w,Rect(50+300,170+200,90,30)).string_("AMP");
 
 
+
+///////////////////////////////////// kick ///////////////////////////////////////
+kc = Button.new(w,Rect(415,10,80,80));
+kc.string = "kick";
+buttons4keys[4] = Button.new(w,Rect(415,400,80,80));
+buttons4keys[4].string = "assign";
+
+
+buttons4keys[4].mouseDownAction = {
+	v = Window.new(name: "press a key to save it", bounds:Rect(500, 500,500,100)).front;
+	t = StaticText(v,Rect(200,10,500,50)).string_("KICK");
+	v.view.keyDownAction = {
+		arg view, char, modifiers, unicode, keycode;
+		[char, keycode].postln;
+		~keys2synth[4] = keycode;
+		};
+};
+
+w.view.keyDownAction = {
+	arg view, char, modifiers, unicode, keycode;
+	var kick;
+
+	if(keycode == ~keys2synth[4]){
+		kick = Synth(\kc, [\start, ~start_temp, \amp, ~amp_kc_temp]);
+	}
+
+};
 
 
 kc.mouseDownAction = {
@@ -420,12 +596,49 @@ kc.mouseDownAction = {
 	kick = Synth(\kc, [\start, ~start_temp, \amp, ~amp_kc_temp]);
 };
 kc_knobs = Array.newClear(2);
+
 kc_knobs[0] = Knob(w,Rect(415,100,80,80));
-kc_knobs[0].action = {~start_temp = kc_knobs[0].value.linlin(0, 1, 40, 2000)};
-kc_knobs[1] = Knob(w,Rect(415,200,80,80));
-kc_knobs[1].action = {~amp_kc_temp = kc_knobs[1].value.linexp(0, 1, 0.01, 2)};
+kc_knobs[0].value = 472/2000;
+kc_knobs[0].action = {~start_temp = kc_knobs[0].value.linlin(0, 1, 40, 2000);
+						postln(~start_temp);
+					};
+knob_names[4,0] =  StaticText(w,Rect(30+400,170,90,30)).string_("START FREQ");
+
+kc_knobs[1] = Knob(w,Rect(415,300,80,80));
+kc_knobs[1].value = 0.1/2;
+kc_knobs[1].action = {~amp_kc_temp = kc_knobs[1].value.linexp(0, 1, 0.01, 2);
+						postln(~amp_kc_temp);
+					};
+knob_names[4,1] =  StaticText(w,Rect(50+400,170+200,90,30)).string_("AMP");
 
 
+
+/////////////////////////////////////// fm //////////////////////////////////////////
+fm = Button.new(w,Rect(515,10,80,80));
+fm.string = "fm";
+buttons4keys[5] = Button.new(w,Rect(515,400,80,80));
+buttons4keys[5].string = "assign";
+
+
+buttons4keys[5].mouseDownAction = {
+	v = Window.new(name: "press a key to save it", bounds:Rect(500, 500,500,100)).front;
+	t = StaticText(v,Rect(200,10,500,50)).string_("FM");
+	v.view.keyDownAction = {
+		arg view, char, modifiers, unicode, keycode;
+		[char, keycode].postln;
+		~keys2synth[5] = keycode;
+		};
+};
+
+w.view.keyDownAction = {
+	arg view, char, modifiers, unicode, keycode;
+	var fm;
+
+	if(keycode == ~keys2synth[5]){
+		fm = Synth(\fm, [\fc, ~fc_temp, \amp, ~amp_fm_temp]);
+	}
+
+};
 
 
 fm.mouseDownAction = {
@@ -433,12 +646,49 @@ fm.mouseDownAction = {
 	fm = Synth(\fm, [\fc, ~fc_temp, \amp, ~amp_fm_temp]);
 };
 fm_knobs = Array.newClear(2);
+
 fm_knobs[0] = Knob(w,Rect(515,100,80,80));
-fm_knobs[0].action = {~fc_temp = fm_knobs[0].value.linlin(0, 1, 200, 2500)};
-fm_knobs[1] = Knob(w,Rect(515,200,80,80));
-fm_knobs[1].action = {~amp_fm_temp = fm_knobs[1].value.linexp(0, 1, 0.01, 3)};
+fm_knobs[0].value = 1000/2500;
+fm_knobs[0].action = {~fc_temp = fm_knobs[0].value.linlin(0, 1, 200, 2500);
+						postln(~fc_temp);
+					};
+knob_names[5,0] =  StaticText(w,Rect(30+500,170,90,30)).string_("FC FREQ");
+
+fm_knobs[1] = Knob(w,Rect(515,300,80,80));
+fm_knobs[1].value = 0.2/3;
+fm_knobs[1].action = {~amp_fm_temp = fm_knobs[1].value.linexp(0, 1, 0.01, 3);
+						postln(~amp_fm_temp);
+					};
+knob_names[5,1] =  StaticText(w,Rect(50+500,170+200,90,30)).string_("AMP");
 
 
+
+///////////////////////////////////// clap electro ///////////////////////////////////////
+ce = Button.new(w,Rect(615,10,80,80));
+ce.string = "clap electro";
+buttons4keys[6] = Button.new(w,Rect(615,400,80,80));
+buttons4keys[6].string = "assign";
+
+
+buttons4keys[6].mouseDownAction = {
+	v = Window.new(name: "press a key to save it", bounds:Rect(500, 500,500,100)).front;
+	t = StaticText(v,Rect(200,10,500,50)).string_("CLAP ELECTRO");
+	v.view.keyDownAction = {
+		arg view, char, modifiers, unicode, keycode;
+		[char, keycode].postln;
+		~keys2synth[6] = keycode;
+		};
+};
+
+w.view.keyDownAction = {
+	arg view, char, modifiers, unicode, keycode;
+	var clap_e;
+
+	if(keycode == ~keys2synth[6]){
+		clap_e = Synth(\ce, [\value, ~value_temp, \amp, ~amp_clap_e_temp]);
+	}
+
+};
 
 
 ce.mouseDownAction = {
@@ -446,21 +696,77 @@ ce.mouseDownAction = {
 	clap_e = Synth(\ce, [\value, ~value_temp, \amp, ~amp_clap_e_temp]);
 };
 ce_knobs = Array.newClear(2);
-ce_knobs[0] = Knob(w,Rect(615,100,80,80));
-ce_knobs[0].action = {~value_temp = ce_knobs[0].value.linlin(0, 1, 200, 9000)};
-ce_knobs[1] = Knob(w,Rect(615,200,80,80));
-ce_knobs[1].action = {~amp_clap_e_temp = ce_knobs[1].value.linexp(0, 1, 0.01, 3.5)};
 
+ce_knobs[0] = Knob(w,Rect(615,100,80,80));
+ce_knobs[0].value = 7600/9000;
+ce_knobs[0].action = {~value_temp = ce_knobs[0].value.linlin(0, 1, 200, 9000);
+						postln(~value_temp);
+					};
+knob_names[6,0] =  StaticText(w,Rect(30+600,170,90,30)).string_("VALUE FREQ");
+
+ce_knobs[1] = Knob(w,Rect(615,300,80,80));
+ce_knobs[1].value = 0.5/3.5;
+ce_knobs[1].action = {~amp_clap_e_temp = ce_knobs[1].value.linexp(0, 1, 0.01, 3.5);
+						postln(~amp_clap_e_temp);
+					};
+knob_names[6,1] =  StaticText(w,Rect(50+600,170+200,90,30)).string_("AMP");
+
+
+
+
+///////////////////////////////////// tom ///////////////////////////////////////
+tom = Button.new(w,Rect(715,10,80,80));
+tom.string = "tom";
+buttons4keys[7] = Button.new(w,Rect(715,400,80,80));
+buttons4keys[7].string = "assign";
+
+
+buttons4keys[7].mouseDownAction = {
+	v = Window.new(name: "press a key to save it", bounds:Rect(500, 500,500,100)).front;
+	t = StaticText(v,Rect(200,10,500,50)).string_("TOM");
+	v.view.keyDownAction = {
+		arg view, char, modifiers, unicode, keycode;
+		[char, keycode].postln;
+		~keys2synth[7] = keycode;
+		};
+};
+
+w.view.keyDownAction = {
+	arg view, char, modifiers, unicode, keycode;
+	var tom;
+
+	if(keycode == ~keys2synth[7]){
+		tom = Synth(\tom, [\pitchRel, ~pitchRel_temp, \startPitch, ~startPitch_temp, \amp, ~amp_tom_temp]);
+	}
+
+};
 
 tom.mouseDownAction = {
 	var tom;
 	tom = Synth(\tom, [\pitchRel, ~pitchRel_temp, \startPitch, ~startPitch_temp, \amp, ~amp_tom_temp]);
 };
-tom_knobs = Array.newClear(2);
+tom_knobs = Array.newClear(3);
+
 tom_knobs[0] = Knob(w,Rect(715,100,80,80));
-tom_knobs[0].action = {~startPitch_temp = tom_knobs[0].value.linlin(0, 1, 100, 3000)};
+tom_knobs[0].value = 1000/3000;
+tom_knobs[0].action = {~startPitch_temp = tom_knobs[0].value.linlin(0, 1, 100, 3000);
+						postln(~startPitch_temp);
+					};
+knob_names[7,0] =  StaticText(w,Rect(30+700,170,90,30)).string_("START PITCH");
+
 tom_knobs[1] = Knob(w,Rect(715,200,80,80));
-tom_knobs[1].action = {~pitchRel_temp = tom_knobs[1].value.linlin(0, 1, 0, 1)};
+tom_knobs[1].value = 0.11/1;
+tom_knobs[1].action = {~pitchRel_temp = tom_knobs[1].value.linexp(0, 1, 0, 1);
+						postln(~pitchRel_temp);
+					};
+knob_names[7,1] =  StaticText(w,Rect(50+700,170+100,90,30)).string_("PITCH REL");
+
+tom_knobs[2] = Knob(w,Rect(715,300,80,80));
+tom_knobs[2].value = 0.1/3;
+tom_knobs[2].action = {~amp_tom_temp = tom_knobs[2].value.linexp(0, 1, 0.01, 3);
+						postln(~amp_tom_temp);
+					};
+knob_names[7,2] =  StaticText(w,Rect(50+700,170+200,90,30)).string_("AMP");
 
 
 )
@@ -608,3 +914,52 @@ MIDIdef.freeAll;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+///////////////////////////////////key input test/////////////////////////////
+(
+~ciccia;
+w = Window.new("click the button").front;
+b = Button.new(w,Rect(10,10,80,80));
+b.string = "click me";
+b.mouseDownAction = {
+	s = Window.new("press a key to save it");
+	s.view.keyDownAction = {
+		arg view, char, modifiers, unicode, keycode;
+		[char, keycode].postln;
+
+		~ciccia = keycode;
+		};
+	s.front;
+};
+
+w.view.keyDownAction = {
+	arg view, char, modifiers, unicode, keycode;
+
+	if(keycode == ~ciccia){
+		postln("wowowjdiwjw");
+	}
+
+};
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
