@@ -681,16 +681,19 @@ knob_names[7,2] =  StaticText(drum_kit_win,Rect(40+700,170+200,90,30)).string_("
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////// connection Supercollider <--> MIDI <--> JUCE/// ///////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////// connection Supercollider <--> OSC <--> JUCE/// ///////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -708,6 +711,15 @@ midiJUCE.postln;
 
 //--------- JUCE--->SC OSC COMMUNICATION -------/////
 /////////////////////////////////////////////////////
+
+
+(
+OSCdef(\bpm,{
+	arg msg, time, addr, port;
+	~bpm = msg[1].postln;
+}, '/bpm');
+)
+
 
 
 //Volume knobs
@@ -806,7 +818,7 @@ OSCdef(\cb_fundFreq,{
 (
 OSCdef(\kc_startFreq,{
 	arg msg, time, addr, port;
-	~start_temp = msg[1].linlin(0, 1, 40, 2000);;
+	~start_temp = msg[1].linlin(0, 1, 40, 2000);
 },
 '/startFreq'
 );
@@ -853,7 +865,184 @@ OSCdef(\tom_pitchRel,{
 )
 
 
+///// ----------- SEQUENCING ------------/////////
+(
+~bdArr = Rest(1/16)!16;
+~hhArr = Rest(1/16)!16;
+~snArr = Rest(1/16)!16;
+~cbArr = Rest(1/16)!16;
+~kcArr = Rest(1/16)!16;
+~fmArr = Rest(1/16)!16;
+~ceArr = Rest(1/16)!16;
+~tomArr = Rest(1/16)!16;
 
+///Receiving the patterns from JUCE
+
+//bd receiver
+
+OSCdef(\bdSeq,
+	{
+		arg msg, time, addr, port;
+		var index, value;
+		//instrument = msg[1];
+		index = msg[1];
+		value = msg[2].postln;
+		switch(value,
+			1, {~bdArr[index]=1/16;},
+			0, {~bdArr[index]=Rest(1/16);}
+		)
+	},
+	'/seq/bd'
+);
+
+
+//hh receiver
+
+OSCdef(\hhSeq,
+	{
+		arg msg, time, addr, port;
+		var index, value;
+		//instrument = msg[1];
+		index = msg[1];
+		value = msg[2].postln;
+		switch(value,
+			1, {~hhArr[index]=1/16;},
+			0, {~hhArr[index]=Rest(1/16);}
+		)
+	},
+	'/seq/hh'
+);
+
+
+//sn receiver
+
+OSCdef(\snSeq,
+	{
+		arg msg, time, addr, port;
+		var index, value;
+		//instrument = msg[1];
+		index = msg[1];
+		value = msg[2].postln;
+		switch(value,
+			1, {~snArr[index]=1/16;},
+			0, {~snArr[index]=Rest(1/16);}
+		)
+	},
+	'/seq/sn'
+);
+
+
+//cb receiver
+
+OSCdef(\cbSeq,
+	{
+		arg msg, time, addr, port;
+		var index, value;
+		//instrument = msg[1];
+		index = msg[1];
+		value = msg[2].postln;
+		switch(value,
+			1, {~cbArr[index]=1/16;},
+			0, {~cbArr[index]=Rest(1/16);}
+		)
+	},
+	'/seq/cb'
+);
+
+//kc receiver
+
+OSCdef(\kcSeq,
+	{
+		arg msg, time, addr, port;
+		var index, value;
+		//instrument = msg[1];
+		index = msg[1];
+		value = msg[2].postln;
+		switch(value,
+			1, {~kcArr[index]=1/16;},
+			0, {~kcArr[index]=Rest(1/16);}
+		)
+	},
+	'/seq/kc'
+);
+
+
+//fm receiver
+
+OSCdef(\fmSeq,
+	{
+		arg msg, time, addr, port;
+		var index, value;
+		//instrument = msg[1];
+		index = msg[1];
+		value = msg[2].postln;
+		switch(value,
+			1, {~fmArr[index]=1/16;},
+			0, {~fmArr[index]=Rest(1/16);}
+		)
+	},
+	'/seq/fm'
+);
+
+
+//ce receiver
+
+OSCdef(\ceSeq,
+	{
+		arg msg, time, addr, port;
+		var index, value;
+		//instrument = msg[1];
+		index = msg[1];
+		value = msg[2].postln;
+		switch(value,
+			1, {~ceArr[index]=1/16;},
+			0, {~ceArr[index]=Rest(1/16);}
+		)
+	},
+	'/seq/ce'
+);
+
+
+//tom receiver
+
+OSCdef(\tomSeq,
+	{
+		arg msg, time, addr, port;
+		var index, value;
+		//instrument = msg[1];
+		index = msg[1];
+		value = msg[2].postln;
+		switch(value,
+			1, {~tomArr[index]=1/16;},
+			0, {~tomArr[index]=Rest(1/16);}
+		)
+	},
+	'/seq/tom'
+);
+
+
+///------ Setting and playing the patterns
+
+Pdef(\bdpat,
+	Pbind(
+		\instrument, \bd,
+		\dur, Pseq(~bdArr, inf),
+		\stretch, 60/~bpm * 4,
+		\l1,~l1_temp, \start, ~start_temp, \amp, ~amp_bd_temp
+	)
+);
+
+OSCdef(\startStop,{
+	arg msg, time, addr, port;
+	msg[1].postln;
+	switch(msg[1],
+		1, {Pdef(\bdpat).play(quant:60/~bpm * 4);},
+		0, {Pdef(\bdpat).stop;}
+	);
+},
+'/startStop');
+
+)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

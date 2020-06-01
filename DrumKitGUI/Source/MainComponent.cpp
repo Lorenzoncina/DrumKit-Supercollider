@@ -194,21 +194,31 @@ MainComponent::MainComponent() : seqPanel(getLookAndFeel().findColour(ResizableW
 
 	//Other Elements
 	startStopButton.setButtonText("Start/Stop");
+	startStopButton.setClickingTogglesState(true);
+	startStopButton.addListener(this);
 	addAndMakeVisible(startStopButton);
 
 	tempoSlider.setRange(50.0,180.0,1.0);
+	tempoSlider.setValue(110);
 	tempoSlider.setSliderStyle(Slider::SliderStyle::Rotary);
 	tempoSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxBelow, true, 30, 15);
 	addAndMakeVisible(tempoSlider);
+	tempoSlider.addListener(this);
+	tempoSlider.synth = "tempo";
+	tempoSlider.addr = "/bpm";
 	tempoSlider.setLookAndFeel(&otherLookAndFeel);
 
 	tempoLabel.setText("Tempo", dontSendNotification);
 	addAndMakeVisible(tempoLabel);
 
 	instrumentSelector.setRange(1.0, 8.0, 1.0);
+	instrumentSelector.setValue(1);
 	instrumentSelector.setSliderStyle(Slider::SliderStyle::Rotary);
 	instrumentSelector.setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxBelow, true, 30, 15);
 	addAndMakeVisible(instrumentSelector);
+	instrumentSelector.addListener(this);
+	instrumentSelector.synth = "selector";
+	instrumentSelector.addr = "/seq/instrSelector";
 	instrumentSelector.setLookAndFeel(&otherLookAndFeel);
 
 	slid9.setRange(0.0, 1.0, 0.01);
@@ -462,21 +472,25 @@ void MainComponent::resized()
 }
 
 
-void MainComponent::sendVolume(MySlider *slider)
-{	 
+void MainComponent::sendVolume(MySlider* slider)
+{
 	float value = slider->getValue();
-	bool sent = sender.send(slider->addr , value, slider->synth);
-	if (sent)
-	{
-		Logger::outputDebugString("Message sent!");
-		Logger::outputDebugString(slider->addr);
-		Logger::outputDebugString((String)value);
-	} 
+	sender.send(slider->addr, value, slider->synth);
 }
 
 void MainComponent::sliderValueChanged(Slider *slider)
 {	
 	//sendVolume(slider->getValue(), slider->synth );
 	sendVolume((MySlider*)slider);
-	Logger::outputDebugString("Value changed!");
+	if (slider == &instrumentSelector)
+	{
+		Logger::outputDebugString("Changed instrument!");
+		seqPanel.instrument = slider->getValue();
+		seqPanel.setButtons();
+	}
+}
+
+void MainComponent::buttonClicked(Button* b)
+{
+	sender.send("/startStop", (int(b->getToggleState())));
 }
