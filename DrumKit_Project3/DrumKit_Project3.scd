@@ -1,7 +1,4 @@
-
 s.boot;
-//s.quit;
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////--- SYNTH BANK ---/////////////////////////////////////////////////////////////
@@ -23,15 +20,6 @@ SynthDef.new("bd", {
 }).add;
 )
 
-//uncomment ad execute the following line of code if you want to listen to the sound
-//b = Synth.new("bd")
-
-/*** IMPORTANT: make sure envelopes inside SynthDefs have a defined doneAction argument that ensures
-that a wanted action happens when the envelope is over, otherwise the synth simply sits in the Server outputting 0s at audio rate and if you assign a Synth.new to the same variable
-you cannot even free it manually anymore. -Mattia***/
-
-// If you want to see what synths are active at any moment on the server uncomment and run the following line.
-//s.plotTree;
 
 // ---hi hat --- //
 (
@@ -44,13 +32,8 @@ SynthDef("hh", {
 }).add;
 )
 
-//uncomment ad execute the following line of code if you want to listen to the sound
-//h = Synth.new("hh");
-
-
 
 // --- snare drum --- //
-
 (
 SynthDef("sn", {arg out = 0, amp = 0.1, sinfreq = 180, att = 0.01, rel = 0.2, ffreq = 2000, pan = 0;
 	var env, snd1, snd2, sum;
@@ -66,8 +49,6 @@ SynthDef("sn", {arg out = 0, amp = 0.1, sinfreq = 180, att = 0.01, rel = 0.2, ff
 }).add;
 )
 
-//uncomment ad execute the following line of code if you want to listen to the sound
-//n = Synth.new("sn");
 
 // --- cowbell --- //
 (
@@ -75,7 +56,6 @@ SynthDef("cb", {
     | out=0, amp=0.3, gate=1, fund_freq=540, pan=0.0 |
     var sig, env, hash;
 
-    // hash = DC.ar(0);
     hash = BPF.ar(
         Hasher.ar(Sweep.ar(rate: TRand.kr(1.0, 10.0))),
         fund_freq * 1.4,
@@ -97,8 +77,6 @@ SynthDef("cb", {
     Out.ar( out, Pan2.ar( sig, pan, amp ) );
 }).add;
 )
-//uncomment ad execute the following line of code if you want to listen to the sound
-//c = Synth.new("cb");
 
 
 // --- kick --- //
@@ -115,8 +93,6 @@ SynthDef("kc", {
     Out.ar(\out.kr(0), Pan2.ar(snd, pan, amp));
 }).add;
 )
-//uncomment ad execute the following line of code if you want to listen to the sound
-//k = Synth.new("kc");
 
 
 // --- frequencymodulator --- //
@@ -138,11 +114,9 @@ SynthDef("fm", {
 	Out.ar(0, sig!2);
 }).add;
 )
-//uncomment ad execute the following line of code if you want to listen to the sound
-//f = Synth.new("fm");
+
 
 // --- clap_electro --- //
-
 (
 SynthDef("ce", {
     |out = 0, amp = 0.5, pan = 0, dur = 1, value = 7600|
@@ -162,7 +136,6 @@ SynthDef("ce", {
     noise1 = LPF.ar(noise1, XLine.kr(7200, 4000, 0.03));
     noise1 = BPF.ar(noise1, 1620, 3);
 
-    // noise 2 - 1 longer single
     env2 = EnvGen.ar(Env.new([0, 1, 0], [0.02, 0.18], [0, -4]), doneAction:2);
 
     noise2 = WhiteNoise.ar(env2);
@@ -177,12 +150,9 @@ SynthDef("ce", {
     Out.ar(out, Pan2.ar(snd,pan,amp));
 }).add;
 )
-//uncomment ad execute the following line of code if you want to listen to the sound
-//c = Synth.new("ce");
 
 
 // --- tom --- //
-
 (
 SynthDef("tom", {
     arg startPitch = 1000, endPitch=60, clickLevel=0.7, pitchRel = 0.11, noiseLevel=1, noiseRel= 0.3, amp=0.1;
@@ -197,17 +167,10 @@ SynthDef("tom", {
     Out.ar(0,Pan2.ar(snd, 0, 1));
 }).add;
 )
-//uncomment ad execute the following line of code if you want to listen to the sound
-//t = Synth.new("tom");
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 
 
 
@@ -218,8 +181,6 @@ SynthDef("tom", {
 NetAddr("127.0.0.1", 57120);
 ~n1 = NetAddr.new("127.0.0.1", 12000);
 
-
-// the bass drum is played when the square is clicked
 (
 var bass_drum;
 var r;
@@ -227,14 +188,11 @@ var lst_syn = ['\bd','\hh','\sn','\cb','\kc','\fm','\ce','\tom'];
 OSCdef('OSCreceiver', {
 
 	arg msg;
-	//var number_of_clicks, clicks = 0;
 	var click_stype = -1;
-	// from processing listener -> osc -> synth
 	click_stype = msg[1];
 	postln("Received click_stype = " + click_stype);
 	bass_drum  = Synth(lst_syn[click_stype]);
-	// send osc message back to processing
-	// change color and return back to p5
+	// send osc message back to processing, change color and return back to p5
 	~colors = {rrand(0,255)}!3;
 	~n1.sendMsg('/changeColor',~colors[0],~colors[1],~colors[2]);
 	~n1.sendMsg('/sendSoundDes',bass_drum);
@@ -242,7 +200,7 @@ OSCdef('OSCreceiver', {
 )
 
 // -----start of motion OSC receiver from iphone, using Syntien
-// represent right hand stick,iphone 1
+// represent right hand stick, iphone 1
 (
 // this is the right hand of the drum stick
 var drum;
@@ -257,15 +215,12 @@ OSCdef('Osc1',{
 	if((x <= -5 )&& (y <= -5 )&& (z >= 5 )){ drum  = Synth(lst_syn[4])};
 	if((x <= -5 )&& (y >= 5 )&& (z <= -5)){ drum  = Synth(lst_syn[5])};
 	if((x <= -5 )&& (y <= -5 )&& (z <= -5)){ drum  = Synth(lst_syn[6])};
-	/*if((x >= 5 )&& (y >= 5 )&& (z >= 5)){ drum  = Synth(lst_syn[4])};
-	if((x >= 5 )&& (y >= 5 )&& (z <= -5)){ drum  = Synth(lst_syn[5])};
-	if((x >= 5 )&& (y <= -5) && (z >= 5)){ drum  = Synth(lst_syn[6])};
-	if((x >= 5) && (y <= -5) && (z <= -5)){ drum  = Synth(lst_syn[7])};*/
 },"/accel/1");
 )
 
-(
+
 // this is the right hand of the drum stick,iphone 2
+(
 var drum;
 var lst_syn = ['\bd','\hh','\sn','\cb','\kc','\fm','\ce','\tom'];
 OSCdef('Osc2',{
@@ -279,29 +234,24 @@ OSCdef('Osc2',{
 	if((x >= 5) && (y <= -5) && (z >= 5) ){ drum  = Synth(lst_syn[1])};
 	if((x >= 5) && (y >= 5) && (z <= -5)){ drum  = Synth(lst_syn[2])};
 	if((x >= 5) && (y <= -5) && (z <= -5)){ drum  = Synth(lst_syn[3])};
-	//if((x <= -5) && (y >= 5) && (z >= 5)){ drum  = Synth(lst_syn[4])};
-	//if((x <= -5) && (y >= 5) && (z <= -5)){ drum  = Synth(lst_syn[5])};
-	//if((x <= -5) && (y <= -5) && (z >= 5)){ drum  = Synth(lst_syn[6])};
-	//if((x <= -5) && (y <= -5) && (z <= -5)){ drum  = Synth(lst_syn[7])};
 },"/accel/2");
 )
 
 
-
-
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-s.plotTree;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////// Supercollider <--> GUI ///////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+MIDIClient.init;
+
+MIDIIn.connectAll;
 
 (
 var bd, hh, sn, cb, kc, fm, ce, tom, knob_names, buttons4keys, drum_kit_win;
@@ -318,11 +268,6 @@ buttons4keys = Array.newClear(8);
 drum_kit_win = Window.new(name: "DRUM KIT", bounds:Rect(100,220,810,500)).background_(Color.grey(0.6)).front;
 
 
-//s.meter;//SHOW THE LEVELS: helps to set the volumes w/o clipping
-
-
-
-//key assignments execution//
 drum_kit_win.view.keyDownAction = {
 	arg view, char, modifiers, unicode, keycode;
 	var chosen_synth;
@@ -678,36 +623,15 @@ knob_names[7,2] =  StaticText(drum_kit_win,Rect(40+700,170+200,90,30)).string_("
 
 )
 
-
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////// connection Supercollider <--> OSC <--> JUCE/// ///////////////////////////////////////////////////
+//////////////////////////////////// connection Supercollider <--> OSC <--> JUCE/// ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-//is the JUCE midi connection ready?
-
-
-
-MIDIClient.init;
-MIDIClient.destinations;
-var midiJUCE = MIDIOut.new(0);
-
-midiJUCE.postln;
-
-
-//--------- JUCE--->SC OSC COMMUNICATION -------/////
-/////////////////////////////////////////////////////
 
 
 (
@@ -1200,116 +1124,6 @@ OSCdef(\startStop,{
 '/startStop');
 
 )
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// connection Supercollider <--> MIDI input sw/hw //////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-MIDIClient.init;
-
-MIDIIn.connectAll;
-
-//check the available midi sources
-MIDIClient.sources;
-
-//print the key you are pressing to check if the MIDI sw/hw works
-MIDIdef.noteOn(\noteOn, {"pressed key: ".postln});
-
-//use this to get more infos
-(
- MIDIdef.noteOn(\noteOn, {
-	arg vel, noteNumber, chan, src;
-	[vel, noteNumber, chan, src].postln;
-});
-)
-
-
-~notes = Array.newClear(128);
-
-(
-//assign only the keys you intend to use to a sample
-//selecte a sample and play a key to assign it
-var selected;
-w = Window.new(name: "Drum parts mapping", bounds:Rect(100,500,400,100)).front;
-~samples = Array.newClear(3);
-)
-
-
-////////// ---- MANUALLY MAPPING A MIDI INSTRUMENT ---- /////////////
-(
-//this assignment should be left to the user. it should go like this "press any key to assign it to the bass drum" and then "press any key to assign it to the snare"
-~notes[36] = "kc";
-~notes[51] = "cb";
- MIDIdef.noteOn(\noteOn, {
-	arg vel, noteNumber, chan, src;
-	Synth.new(~notes[noteNumber], [\amp, vel.linexp(1, 127, 0.01, 0.3)]);//amp ARGUMENT SHOULD BE CONSISTENT ACROSS ALL SynthDefs
-});
-)
-
-
-
-
-
-
-//antonaci's code////////////////////////////////////////////////////////////////////////////////////
-(
-SynthDef("sik-goo", { |out, freq = 440, formfreq = 100, gate = 0.0, bwfreq = 800;
-	var x;
-	x = Formant.ar(SinOsc.kr(0.02, 0, 10, freq), formfreq, bwfreq);
-	x = EnvGen.kr(Env.adsr, gate, Latch.kr(gate, gate)) * x;
-	Out.ar(out, x);
-	}).add;
-)
-x = Synth.new("sik-goo");
-
-
-(
-~noteOn = {
-				arg src, chan, num, vel;
-				x.set(\freq, num.midicps / 4.0);
-				x.set(\gate, vel / 200 );
-				x.set(\formfreq, vel / 127 * 1000);
-			};
-MIDIIn.addFuncTo(\noteOn, ~noteOn);
-
-
-~noteOff = {
-			arg src,chan,num,vel;
-			x.set(\gate, 0.0);
-			};
-MIDIIn.addFuncTo(\noteOff, ~noteOff);
-
-
-~bend = {
-			arg src,chan,val; //(val * 0.048828125).postln;
-			x.set(\bwfreq, val * 0.048828125 );
-		};
-MIDIIn.addFuncTo(\bend, ~bend);
-)
-
-
-//cleanup
-MIDIIn.removeFuncFrom(\noteOn, ~noteOn);
-MIDIIn.removeFuncFrom(\noteOff, ~noteOff);
-MIDIIn.removeFuncFrom(\bend, ~bend);
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-MIDIdef.freeAll;
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
