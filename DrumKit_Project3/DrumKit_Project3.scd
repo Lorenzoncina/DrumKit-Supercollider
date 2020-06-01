@@ -149,7 +149,7 @@ SynthDef("ce", {
     var env1, env2, snd, noise1, noise2;
 
     // noise 1 - 4 short repeats
-    env1 = EnvGen.ar(7
+    env1 = EnvGen.ar(
         Env.new(
             [0, 1, 0, 0.9, 0, 0.7, 0, 0.5, 0],
             [0.001, 0.009, 0, 0.008, 0, 0.01, 0, 0.03],
@@ -681,9 +681,6 @@ knob_names[7,2] =  StaticText(drum_kit_win,Rect(40+700,170+200,90,30)).string_("
 
 
 
-
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -730,14 +727,38 @@ OSCdef(\volume,{
 	vol = msg[1];
 	synth = msg[2];
 	switch(synth,
-		\bd, {~amp_bd_temp = vol.linexp(0, 1, 0.01, 1);},
-		\hh, {~amp_hh_temp = vol.linexp(0, 1, 0.01, 3);},
-		\sn, {~amp_sn_temp = vol.linexp(0, 1, 0.01, 0.7);},
-		\cb, {~amp_cb_temp = vol.linexp(0, 1, 0.01, 3);},
-		\kc, {~amp_kc_temp = vol.linexp(0, 1, 0.01, 1.5);},
-		\fm, {~amp_fm_temp = vol.linexp(0, 1, 0.01, 3);},
-		\ce, {~amp_clap_e_temp = vol.linexp(0, 1, 0.01, 3.5);},
-		\tom, {~amp_tom_temp = vol.linexp(0, 1, 0.01, 3);}
+		\bd, {
+			~amp_bd_temp = vol.linexp(0, 1, 0.01, 1);
+			~bd_seq_amp.source = ~amp_bd_temp;
+		},
+		\hh, {
+			~amp_hh_temp = vol.linexp(0, 1, 0.01, 3);
+			~hh_seq_amp.source = ~amp_hh_temp;
+		},
+		\sn, {
+			~amp_sn_temp = vol.linexp(0, 1, 0.01, 0.7);
+			~sn_seq_amp.source = ~amp_sn_temp;
+		},
+		\cb, {
+			~amp_cb_temp = vol.linexp(0, 1, 0.01, 3);
+			~cb_seq_amp.source = ~amp_cb_temp;
+		},
+		\kc, {
+			~amp_kc_temp = vol.linexp(0, 1, 0.01, 1.5);
+			~kc_seq_amp.source = ~amp_kc_temp;
+		},
+		\fm, {
+			~amp_fm_temp = vol.linexp(0, 1, 0.01, 3);
+			~fm_seq_amp.source = ~amp_fm_temp;
+		},
+		\ce, {
+			~amp_clap_e_temp = vol.linexp(0, 1, 0.01, 3.5);
+			~ce_seq_amp.source = ~amp_clap_e_temp;
+		},
+		\tom, {
+			~amp_tom_temp = vol.linexp(0, 1, 0.01, 3);
+			~tom_seq_amp.source = ~amp_tom_temp;
+		}
 	)
 },
 '/amp'
@@ -749,6 +770,7 @@ OSCdef(\volume,{
 OSCdef(\bd_L1,{
 	arg msg, time, addr, port;
 	~l1_temp =  msg[1].linlin(0, 1, 0, 2.5);
+	~bd_seq_l1.source = ~l1_temp;
 },
 '/kickLev'
 );
@@ -759,6 +781,7 @@ OSCdef(\bd_L1,{
 OSCdef(\bd_start,{
 	arg msg, time, addr, port;
 	~start_temp = msg[1].linlin(0, 1, 0, 500);
+	~bd_seq_start.source = ~start_temp;
 },
 '/start'
 );
@@ -769,6 +792,7 @@ OSCdef(\bd_start,{
 OSCdef(\hh_Q,{
 	arg msg, time, addr, port;
 	~q_temp = msg[1].linlin(0, 1, 0, 5);
+	~hh_seq_q.source = ~q_temp;
 },
 '/q'
 );
@@ -779,6 +803,7 @@ OSCdef(\hh_Q,{
 OSCdef(\hh_ffreq,{
 	arg msg, time, addr, port;
 	~ffreq_hh_temp = msg[1].linlin(0, 1, 100, 15000);
+	~hh_seq_ffreq.source = ~ffreq_hh_temp;
 },
 '/hh/ffreq'
 );
@@ -789,6 +814,7 @@ OSCdef(\hh_ffreq,{
 OSCdef(\sn_sinFreq,{
 	arg msg, time, addr, port;
 	~sinfreq_temp = msg[1].linlin(0, 1, 0, 1000);
+	~sn_seq_sinfreq.source = ~sinfreq_temp;
 },
 '/sinFreq'
 );
@@ -799,6 +825,7 @@ OSCdef(\sn_sinFreq,{
 OSCdef(\sn_ffreq,{
 	arg msg, time, addr, port;
 	~ffreq_sn_temp = msg[1].linlin(0, 1, 100, 5000);
+	~sn_seq_ffreq.source = ~ffreq_sn_temp;
 },
 '/sn/ffreq'
 );
@@ -809,6 +836,7 @@ OSCdef(\sn_ffreq,{
 OSCdef(\cb_fundFreq,{
 	arg msg, time, addr, port;
 	~fundfreq_temp = msg[1].linlin(0, 1, 30, 1000);
+	~cb_seq_fundfreq.source = ~fundfreq_temp;
 },
 '/fundFreq'
 );
@@ -819,6 +847,7 @@ OSCdef(\cb_fundFreq,{
 OSCdef(\kc_startFreq,{
 	arg msg, time, addr, port;
 	~start_temp = msg[1].linlin(0, 1, 40, 2000);
+	~kc_seq_start.source = ~start_temp;
 },
 '/startFreq'
 );
@@ -829,6 +858,7 @@ OSCdef(\kc_startFreq,{
 OSCdef(\fm_fcFreq,{
 	arg msg, time, addr, port;
 	~fc_temp = msg[1].linlin(0, 1, 200, 2500);
+	~fm_seq_fc.source = ~fc_temp;
 },
 '/fcFreq'
 );
@@ -839,6 +869,7 @@ OSCdef(\fm_fcFreq,{
 OSCdef(\ce_valueFreq,{
 	arg msg, time, addr, port;
 	~value_temp = msg[1].linlin(0, 1, 200, 9000);
+	~ce_seq_value.source = ~value_temp;
 },
 '/valueFreq'
 );
@@ -849,6 +880,7 @@ OSCdef(\ce_valueFreq,{
 OSCdef(\tom_startPitch,{
 	arg msg, time, addr, port;
 	~startPitch_temp = msg[1].linlin(0, 1, 100, 3000);
+	~tom_seq_startPitch.source = ~startPitch_temp;
 },
 '/startPitch'
 );
@@ -859,6 +891,7 @@ OSCdef(\tom_startPitch,{
 OSCdef(\tom_pitchRel,{
 	arg msg, time, addr, port;
 	~pitchRel_temp = msg[1].linlin(0, 1, 0, 1);
+	~tom_seq_pitchRel.source = ~pitchRel_temp;
 },
 '/pitchRel'
 );
@@ -1021,23 +1054,147 @@ OSCdef(\tomSeq,
 );
 
 
-///------ Setting and playing the patterns
+///////------ Setting and playing the patterns ---------///////
+
+~bpm = 110;
+
+//-------bd pattern
+~bd_seq_amp = PatternProxy(Pn(~amp_bd_temp));
+~bd_seq_l1 = PatternProxy(Pn(~l1_temp));
+~bd_seq_start = PatternProxy(Pn(~start_temp));
 
 Pdef(\bdpat,
 	Pbind(
 		\instrument, \bd,
 		\dur, Pseq(~bdArr, inf),
 		\stretch, 60/~bpm * 4,
-		\l1,~l1_temp, \start, ~start_temp, \amp, ~amp_bd_temp
+		\l1,~bd_seq_l1, \start, ~bd_seq_start, \amp, ~bd_seq_amp
 	)
 );
 
+//-------hh pattern
+~hh_seq_amp = PatternProxy(Pn(~amp_hh_temp));
+~hh_seq_q = PatternProxy(Pn(~q_temp));
+~hh_seq_ffreq = PatternProxy(Pn(~ffreq_hh_temp));
+
+Pdef(\hhpat,
+	Pbind(
+		\instrument, \hh,
+		\dur, Pseq(~hhArr, inf),
+		\stretch, 60/~bpm * 4,
+		\q, ~hh_seq_q, \ffreq, ~hh_seq_ffreq, \amp, ~hh_seq_amp
+	)
+);
+
+//-------sn pattern
+~sn_seq_amp = PatternProxy(Pn(~amp_sn_temp));
+~sn_seq_sinfreq = PatternProxy(Pn(~sinfreq_temp));
+~sn_seq_ffreq = PatternProxy(Pn(~ffreq_sn_temp));
+
+Pdef(\snpat,
+	Pbind(
+		\instrument, \sn,
+		\dur, Pseq(~snArr, inf),
+		\stretch, 60/~bpm * 4,
+		\sinfreq, ~sn_seq_sinfreq, \ffreq, ~sn_seq_ffreq, \amp, ~sn_seq_amp
+	)
+);
+
+
+//-------cb pattern
+~cb_seq_amp = PatternProxy(Pn(~amp_cb_temp));
+~cb_seq_fundfreq = PatternProxy(Pn(~fundfreq_temp));
+
+Pdef(\cbpat,
+	Pbind(
+		\instrument, \cb,
+		\dur, Pseq(~cbArr, inf),
+		\stretch, 60/~bpm * 4,
+		\fund_freq, ~cb_seq_fundfreq, \amp, ~cb_seq_amp
+	)
+);
+
+
+//-------kc pattern
+~kc_seq_amp = PatternProxy(Pn(~amp_kc_temp));
+~kc_seq_start = PatternProxy(Pn(~start_temp));
+
+Pdef(\kcpat,
+	Pbind(
+		\instrument, \kc,
+		\dur, Pseq(~kcArr, inf),
+		\stretch, 60/~bpm * 4,
+		\start, ~kc_seq_start, \amp, ~kc_seq_amp
+	)
+);
+
+
+//-------fm pattern
+~fm_seq_amp = PatternProxy(Pn(~amp_fm_temp));
+~fm_seq_fc = PatternProxy(Pn(~fc_temp));
+
+Pdef(\fmpat,
+	Pbind(
+		\instrument, \fm,
+		\dur, Pseq(~fmArr, inf),
+		\stretch, 60/~bpm * 4,
+		\fc, ~fm_seq_fc, \amp, ~fm_seq_amp
+	)
+);
+
+//-------ce pattern
+~ce_seq_amp = PatternProxy(Pn(~amp_clap_e_temp));
+~ce_seq_value = PatternProxy(Pn(~value_temp));
+
+Pdef(\cepat,
+	Pbind(
+		\instrument, \ce,
+		\dur, Pseq(~ceArr, inf),
+		\stretch, 60/~bpm * 4,
+		\value, ~ce_seq_value, \amp, ~ce_seq_amp
+	)
+);
+
+//-------tom pattern
+~tom_seq_amp = PatternProxy(Pn(~amp_tom_temp));
+~tom_seq_pitchRel = PatternProxy(Pn(~pitchRel_temp));
+~tom_seq_startPitch = PatternProxy(Pn(~startPitch_temp));
+
+Pdef(\tompat,
+	Pbind(
+		\instrument, \tom,
+		\dur, Pseq(~tomArr, inf),
+		\stretch, 60/~bpm * 4,
+		\pitchRel, ~tom_seq_pitchRel, \startPitch, ~tom_seq_startPitch, \amp, ~tom_seq_amp
+	)
+);
+
+
+////-----START-STOP BUTTON
 OSCdef(\startStop,{
 	arg msg, time, addr, port;
 	msg[1].postln;
 	switch(msg[1],
-		1, {Pdef(\bdpat).play(quant:60/~bpm * 4);},
-		0, {Pdef(\bdpat).stop;}
+		1, {
+			Pdef(\bdpat).play(quant:60/~bpm * 4);
+			Pdef(\hhpat).play(quant:60/~bpm * 4);
+			Pdef(\snpat).play(quant:60/~bpm * 4);
+			Pdef(\cbpat).play(quant:60/~bpm * 4);
+			Pdef(\kcpat).play(quant:60/~bpm * 4);
+			Pdef(\fmpat).play(quant:60/~bpm * 4);
+			Pdef(\cepat).play(quant:60/~bpm * 4);
+			Pdef(\tompat).play(quant:60/~bpm * 4);
+		},
+		0, {
+			Pdef(\bdpat).stop;
+			Pdef(\hhpat).stop;
+			Pdef(\snpat).stop;
+			Pdef(\cbpat).stop;
+			Pdef(\kcpat).stop;
+			Pdef(\fmpat).stop;
+			Pdef(\cepat).stop;
+			Pdef(\tompat).stop;
+		}
 	);
 },
 '/startStop');
