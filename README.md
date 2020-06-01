@@ -2,7 +2,8 @@
 
 ## Links:
 1. Project Link: https://github.com/Lorenzoncina/DrumKit-Supercollider.git.
-2. Report Link: https://www.overleaf.com/9148114896fvnxxjmtfyym
+2. docs/report.pdf
+3. slides
 
 ## Description:
 Create a set of drum sounds (min 3) and an interface to control them.
@@ -17,7 +18,13 @@ Be creative, feel free to combine different components for visualization, user i
 control.
 
 ## System Design
+The DrumKit application design was based on classic analog drum machines, like the Roland TR-808, but the controllers are split up on several different platforms through which it's possible to interact with the sounds. The goal was to allow the user to play the DrumKit using any of these different platforms.
 ![System Diagram](docs/images/flow.png)
+
+![System Diagram](docs/images/SuperColliderGUI.png)
+
+![System Diagram](docs/images/p5_GUI.png)
+
 
 
 ## Output:
