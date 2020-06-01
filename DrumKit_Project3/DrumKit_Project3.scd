@@ -223,7 +223,7 @@ NetAddr("127.0.0.1", 57120);
 (
 var bass_drum;
 var r;
-var lst_syn = ['\bd','\hh','\sn','\cb','\kc','\fm'];
+var lst_syn = ['\bd','\hh','\sn','\cb','\kc','\fm','\ce','\tom'];
 OSCdef('OSCreceiver', {
 
 	arg msg;
@@ -256,8 +256,8 @@ OSCdef('Osc1',{
 	if((x <= -5 )&& (y >= 5 )&& (z >= 5 )){ drum  = Synth(lst_syn[3])};
 	if((x <= -5 )&& (y <= -5 )&& (z >= 5 )){ drum  = Synth(lst_syn[4])};
 	if((x <= -5 )&& (y >= 5 )&& (z <= -5)){ drum  = Synth(lst_syn[5])};
-	/*if((x <= -5 )&& (y <= -5 )&& (z <= -5)){ drum  = Synth(lst_syn[3])};
-	if((x >= 5 )&& (y >= 5 )&& (z >= 5)){ drum  = Synth(lst_syn[4])};
+	if((x <= -5 )&& (y <= -5 )&& (z <= -5)){ drum  = Synth(lst_syn[6])};
+	/*if((x >= 5 )&& (y >= 5 )&& (z >= 5)){ drum  = Synth(lst_syn[4])};
 	if((x >= 5 )&& (y >= 5 )&& (z <= -5)){ drum  = Synth(lst_syn[5])};
 	if((x >= 5 )&& (y <= -5) && (z >= 5)){ drum  = Synth(lst_syn[6])};
 	if((x >= 5) && (y <= -5) && (z <= -5)){ drum  = Synth(lst_syn[7])};*/
@@ -278,7 +278,7 @@ OSCdef('Osc2',{
 	if((x >= 5) && (y >= 5) && (z >= 5) ){ drum  = Synth(lst_syn[0])};
 	if((x >= 5) && (y <= -5) && (z >= 5) ){ drum  = Synth(lst_syn[1])};
 	if((x >= 5) && (y >= 5) && (z <= -5)){ drum  = Synth(lst_syn[2])};
-	//if((x >= 5) && (y <= -5) && (z <= -5)){ drum  = Synth(lst_syn[3])};
+	if((x >= 5) && (y <= -5) && (z <= -5)){ drum  = Synth(lst_syn[3])};
 	//if((x <= -5) && (y >= 5) && (z >= 5)){ drum  = Synth(lst_syn[4])};
 	//if((x <= -5) && (y >= 5) && (z <= -5)){ drum  = Synth(lst_syn[5])};
 	//if((x <= -5) && (y <= -5) && (z >= 5)){ drum  = Synth(lst_syn[6])};
