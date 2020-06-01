@@ -50,10 +50,10 @@ Pdef(\kickpat,
 		\stretch, 60/~bpm * 4,
 		\amp, 0.3!4++[0.003],
 	)
-).play(quant:60/~bpm * 4)//.quant_(60/~bpm * 4) --> this will wait until next measure to execute changes to the Pdef
+)//.quant_(60/~bpm * 4) --> this will wait until next measure to execute changes to the Pdef
 )
 
-Pdef(\kickpat).stop;
+Pdef(\kickpat).stop(quant:60/~bpm * 4);
 
 (
 Pdef(\snarepat,

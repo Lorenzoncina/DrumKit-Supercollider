@@ -149,7 +149,7 @@ SynthDef("ce", {
     var env1, env2, snd, noise1, noise2;
 
     // noise 1 - 4 short repeats
-    env1 = EnvGen.ar(
+    env1 = EnvGen.ar(7
         Env.new(
             [0, 1, 0, 0.9, 0, 0.7, 0, 0.5, 0],
             [0.001, 0.009, 0, 0.008, 0, 0.01, 0, 0.03],
