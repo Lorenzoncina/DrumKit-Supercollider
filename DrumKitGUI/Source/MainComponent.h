@@ -203,6 +203,8 @@ private:
 	Label volLab1, volLab2, volLab3, volLab4, volLab5, volLab6, volLab7, volLab8;
 	Label tempo;
 	Label slidLab1, slidLab2, slidLab3, slidLab4, slidLab5, slidLab6, slidLab7, slidLab8, slidLab9, slidLab10, slidLab11, slidLab12;
+	Label instrumentSelectorLabel;
+	Label bassDrumLabel, hitHatLabel, snareLabel, cowbleLabel, kickLabel, fmLabel, clapElectroLabel, tomLabel;
 
 
 	OtherLookAndFeel otherLookAndFeel;

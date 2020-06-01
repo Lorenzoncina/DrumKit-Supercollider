@@ -334,6 +334,46 @@ MainComponent::MainComponent() : seqPanel(getLookAndFeel().findColour(ResizableW
 	slidLab12.setText("PITCH_REL", dontSendNotification);
 	slidLab12.setFont(Font(10));
 
+
+	addAndMakeVisible(instrumentSelectorLabel);
+	instrumentSelectorLabel.setText("Instrument" , dontSendNotification);
+	instrumentSelectorLabel.setFont(Font(12));
+
+
+	addAndMakeVisible(bassDrumLabel);
+	bassDrumLabel.setText("Bass Drum", dontSendNotification);
+	bassDrumLabel.setFont(Font(12));
+
+	addAndMakeVisible(hitHatLabel);
+	hitHatLabel.setText("hitHat", dontSendNotification);
+	hitHatLabel.setFont(Font(12));
+
+	addAndMakeVisible(snareLabel);
+	snareLabel.setText("Snare", dontSendNotification);
+	snareLabel.setFont(Font(12));
+
+	addAndMakeVisible(cowbleLabel);
+	cowbleLabel.setText("Cowble", dontSendNotification);
+	cowbleLabel.setFont(Font(12));
+
+	addAndMakeVisible(kickLabel);
+	kickLabel.setText("Kick", dontSendNotification);
+	kickLabel.setFont(Font(12));
+
+	addAndMakeVisible(fmLabel);
+	fmLabel.setText("FM", dontSendNotification);
+	fmLabel.setFont(Font(12));
+
+	addAndMakeVisible(clapElectroLabel);
+	clapElectroLabel.setText("Clap", dontSendNotification);
+	clapElectroLabel.setFont(Font(12));
+
+	addAndMakeVisible(tomLabel);
+	tomLabel.setText("Tom", dontSendNotification);
+	tomLabel.setFont(Font(12));
+
+
+
 }
 
 MainComponent::~MainComponent()
@@ -469,6 +509,20 @@ void MainComponent::resized()
 	slidLab10.setBounds(187, 310, 60, 15);
 	slidLab11.setBounds(247, 310, 60, 15);
 	slidLab12.setBounds(543, 310, 60, 15);
+
+
+	instrumentSelectorLabel.setBounds(32,255,60,15);
+
+	
+	bassDrumLabel.setBounds(118, 5, 60, 15);
+	hitHatLabel.setBounds(187, 5, 60, 15);
+	snareLabel.setBounds(245, 5, 60, 15);
+	cowbleLabel.setBounds(303, 5, 60, 15);
+	kickLabel.setBounds(373, 5, 60, 15);
+	fmLabel.setBounds(435, 5, 60, 15);
+	clapElectroLabel.setBounds(493, 5, 60, 15);
+	tomLabel.setBounds(555, 5, 60, 15);
+	
 }
 
 
