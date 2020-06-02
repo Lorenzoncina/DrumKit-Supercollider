@@ -25,7 +25,7 @@ The DrumKit application design was based on classic analog drum machines, like t
 
 ![System Diagram](docs/images/p5_GUI.png)
 
-![System Diagram](docs/images/JuceDrumKitGui.PNG)
+![System Diagram](docs/images/DrumKitGUI.png)
 
 
 
