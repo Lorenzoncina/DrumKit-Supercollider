@@ -18,11 +18,11 @@ SynthDef.new("bd", {
     Out.ar(0,[boom,boom])
 
 }).add;
-)
+
 
 
 // ---hi hat --- //
-(
+
 SynthDef("hh", {
     arg noiseRel = 0.25380977392197, noiseLevel=0.18370378851891, ffreq=9853, q=0.59219532012939, amp=0.3;
     var noiseOsc = BBandPass.ar(PinkNoise.ar(), ffreq, q);
@@ -30,11 +30,11 @@ SynthDef("hh", {
     var snd = noiseOsc * noiseEnv * 6*amp;
     Out.ar(0,Pan2.ar(snd, 0, 1));
 }).add;
-)
+
 
 
 // --- snare drum --- //
-(
+
 SynthDef("sn", {arg out = 0, amp = 0.1, sinfreq = 180, att = 0.01, rel = 0.2, ffreq = 2000, pan = 0;
 	var env, snd1, snd2, sum;
 	env = Env.perc(att, rel, amp).kr(doneAction: 2);
@@ -47,11 +47,11 @@ SynthDef("sn", {arg out = 0, amp = 0.1, sinfreq = 180, att = 0.01, rel = 0.2, ff
 	sum = snd1 + snd2;
 	Out.ar(out, Pan2.ar(sum, pan));
 }).add;
-)
+
 
 
 // --- cowbell --- //
-(
+
 SynthDef("cb", {
     | out=0, amp=0.3, gate=1, fund_freq=540, pan=0.0 |
     var sig, env, hash;
@@ -76,11 +76,11 @@ SynthDef("cb", {
 
     Out.ar( out, Pan2.ar( sig, pan, amp ) );
 }).add;
-)
+
 
 
 // --- kick --- //
-(
+
 SynthDef("kc", {
 	arg amp=0.1, pan=0, start=472;
     var snd;
@@ -92,11 +92,11 @@ SynthDef("kc", {
     snd = snd.tanh;
     Out.ar(\out.kr(0), Pan2.ar(snd, pan, amp));
 }).add;
-)
+
 
 
 // --- frequencymodulator --- //
-(
+
 SynthDef("fm", {
 	|
 	amp=0.2,
@@ -113,11 +113,11 @@ SynthDef("fm", {
 	sig = HPF.ar(sig, 1000);
 	Out.ar(0, sig!2);
 }).add;
-)
+
 
 
 // --- clap_electro --- //
-(
+
 SynthDef("ce", {
     |out = 0, amp = 0.5, pan = 0, dur = 1, value = 7600|
     var env1, env2, snd, noise1, noise2;
@@ -149,11 +149,11 @@ SynthDef("ce", {
 
     Out.ar(out, Pan2.ar(snd,pan,amp));
 }).add;
-)
+
 
 
 // --- tom --- //
-(
+
 SynthDef("tom", {
     arg startPitch = 1000, endPitch=60, clickLevel=0.7, pitchRel = 0.11, noiseLevel=1, noiseRel= 0.3, amp=0.1;
     var pitchEnv = EnvGen.ar(Env.perc(0.01, pitchRel));
@@ -696,16 +696,11 @@ w = Window.new(name: "Drum parts mapping", bounds:Rect(100,500,400,100)).front;
 
 
 (
-OSCdef(\bpm,{
-	arg msg, time, addr, port;
-	~bpm = msg[1].postln;
-}, '/bpm');
-)
 
 
 
 //Volume knobs
-(
+
 OSCdef(\volume,{
 	arg msg, time, addr, port;
 	var vol, synth;
@@ -748,10 +743,10 @@ OSCdef(\volume,{
 },
 '/amp'
 );
-)
+
 
 //bd L1 parameter
-(
+
 OSCdef(\bd_L1,{
 	arg msg, time, addr, port;
 	~l1_temp =  msg[1].linlin(0, 1, 0, 2.5);
@@ -759,10 +754,10 @@ OSCdef(\bd_L1,{
 },
 '/kickLev'
 );
-)
+
 
 //bd start parameter
-(
+
 OSCdef(\bd_start,{
 	arg msg, time, addr, port;
 	~start_temp = msg[1].linlin(0, 1, 0, 500);
@@ -770,10 +765,10 @@ OSCdef(\bd_start,{
 },
 '/start'
 );
-)
+
 
 //hh Q parameter
-(
+
 OSCdef(\hh_Q,{
 	arg msg, time, addr, port;
 	~q_temp = msg[1].linlin(0, 1, 0, 5);
@@ -781,10 +776,10 @@ OSCdef(\hh_Q,{
 },
 '/q'
 );
-)
+
 
 //hh ffreq parameter
-(
+
 OSCdef(\hh_ffreq,{
 	arg msg, time, addr, port;
 	~ffreq_hh_temp = msg[1].linlin(0, 1, 100, 15000);
@@ -792,10 +787,10 @@ OSCdef(\hh_ffreq,{
 },
 '/hh/ffreq'
 );
-)
+
 
 //sn sinFreq parameter
-(
+
 OSCdef(\sn_sinFreq,{
 	arg msg, time, addr, port;
 	~sinfreq_temp = msg[1].linlin(0, 1, 0, 1000);
@@ -803,10 +798,10 @@ OSCdef(\sn_sinFreq,{
 },
 '/sinFreq'
 );
-)
+
 
 //sn ffreq parameter
-(
+
 OSCdef(\sn_ffreq,{
 	arg msg, time, addr, port;
 	~ffreq_sn_temp = msg[1].linlin(0, 1, 100, 5000);
@@ -814,10 +809,10 @@ OSCdef(\sn_ffreq,{
 },
 '/sn/ffreq'
 );
-)
+
 
 //cb fundFreq parameter
-(
+
 OSCdef(\cb_fundFreq,{
 	arg msg, time, addr, port;
 	~fundfreq_temp = msg[1].linlin(0, 1, 30, 1000);
@@ -825,10 +820,10 @@ OSCdef(\cb_fundFreq,{
 },
 '/fundFreq'
 );
-)
+
 
 //kc startFreq parameter
-(
+
 OSCdef(\kc_startFreq,{
 	arg msg, time, addr, port;
 	~start_temp = msg[1].linlin(0, 1, 40, 2000);
@@ -836,10 +831,10 @@ OSCdef(\kc_startFreq,{
 },
 '/startFreq'
 );
-)
+
 
 //fm fcFreq parameter
-(
+
 OSCdef(\fm_fcFreq,{
 	arg msg, time, addr, port;
 	~fc_temp = msg[1].linlin(0, 1, 200, 2500);
@@ -847,10 +842,10 @@ OSCdef(\fm_fcFreq,{
 },
 '/fcFreq'
 );
-)
+
 
 //ce valueFreq parameter
-(
+
 OSCdef(\ce_valueFreq,{
 	arg msg, time, addr, port;
 	~value_temp = msg[1].linlin(0, 1, 200, 9000);
@@ -858,10 +853,10 @@ OSCdef(\ce_valueFreq,{
 },
 '/valueFreq'
 );
-)
+
 
 //tom startPitch parameter
-(
+
 OSCdef(\tom_startPitch,{
 	arg msg, time, addr, port;
 	~startPitch_temp = msg[1].linlin(0, 1, 100, 3000);
@@ -869,10 +864,10 @@ OSCdef(\tom_startPitch,{
 },
 '/startPitch'
 );
-)
+
 
 //tom pitchRel parameter
-(
+
 OSCdef(\tom_pitchRel,{
 	arg msg, time, addr, port;
 	~pitchRel_temp = msg[1].linlin(0, 1, 0, 1);
@@ -880,8 +875,15 @@ OSCdef(\tom_pitchRel,{
 },
 '/pitchRel'
 );
-)
 
+
+OSCdef(\bpm,{
+	arg msg, time, addr, port;
+	~bpmValue = msg[1];
+	~bpm.source = (60/~bpmValue * 4).postln;
+}, '/bpm');
+
+)
 
 ///// ----------- SEQUENCING ------------/////////
 (
@@ -1039,23 +1041,35 @@ OSCdef(\tomSeq,
 );
 
 
+
+
 ///////------ Setting and playing the patterns ---------///////
 
-~bpm = 110;
+~bpmValue = 110;
+~bpm = PatternProxy(Pn(60/~bpmValue * 4));
+
+
 
 //-------bd pattern
 ~bd_seq_amp = PatternProxy(Pn(~amp_bd_temp));
 ~bd_seq_l1 = PatternProxy(Pn(~l1_temp));
 ~bd_seq_start = PatternProxy(Pn(~start_temp));
 
+
+
+
 Pdef(\bdpat,
-	Pbind(
+	 Pbind(
 		\instrument, \bd,
 		\dur, Pseq(~bdArr, inf),
-		\stretch, 60/~bpm * 4,
+		\stretch, ~bpm,
 		\l1,~bd_seq_l1, \start, ~bd_seq_start, \amp, ~bd_seq_amp
 	)
 );
+
+//~bpm.source = 60/90 *4
+
+
 
 //-------hh pattern
 ~hh_seq_amp = PatternProxy(Pn(~amp_hh_temp));
@@ -1066,7 +1080,7 @@ Pdef(\hhpat,
 	Pbind(
 		\instrument, \hh,
 		\dur, Pseq(~hhArr, inf),
-		\stretch, 60/~bpm * 4,
+		\stretch, ~bpm,
 		\q, ~hh_seq_q, \ffreq, ~hh_seq_ffreq, \amp, ~hh_seq_amp
 	)
 );
@@ -1080,7 +1094,7 @@ Pdef(\snpat,
 	Pbind(
 		\instrument, \sn,
 		\dur, Pseq(~snArr, inf),
-		\stretch, 60/~bpm * 4,
+		\stretch, ~bpm,
 		\sinfreq, ~sn_seq_sinfreq, \ffreq, ~sn_seq_ffreq, \amp, ~sn_seq_amp
 	)
 );
@@ -1094,7 +1108,7 @@ Pdef(\cbpat,
 	Pbind(
 		\instrument, \cb,
 		\dur, Pseq(~cbArr, inf),
-		\stretch, 60/~bpm * 4,
+		\stretch, ~bpm,
 		\fund_freq, ~cb_seq_fundfreq, \amp, ~cb_seq_amp
 	)
 );
@@ -1108,7 +1122,7 @@ Pdef(\kcpat,
 	Pbind(
 		\instrument, \kc,
 		\dur, Pseq(~kcArr, inf),
-		\stretch, 60/~bpm * 4,
+		\stretch, ~bpm,
 		\start, ~kc_seq_start, \amp, ~kc_seq_amp
 	)
 );
@@ -1122,7 +1136,7 @@ Pdef(\fmpat,
 	Pbind(
 		\instrument, \fm,
 		\dur, Pseq(~fmArr, inf),
-		\stretch, 60/~bpm * 4,
+		\stretch, ~bpm,
 		\fc, ~fm_seq_fc, \amp, ~fm_seq_amp
 	)
 );
@@ -1135,7 +1149,7 @@ Pdef(\cepat,
 	Pbind(
 		\instrument, \ce,
 		\dur, Pseq(~ceArr, inf),
-		\stretch, 60/~bpm * 4,
+		\stretch, ~bpm,
 		\value, ~ce_seq_value, \amp, ~ce_seq_amp
 	)
 );
@@ -1149,10 +1163,12 @@ Pdef(\tompat,
 	Pbind(
 		\instrument, \tom,
 		\dur, Pseq(~tomArr, inf),
-		\stretch, 60/~bpm * 4,
+		\stretch, ~bpm,
 		\pitchRel, ~tom_seq_pitchRel, \startPitch, ~tom_seq_startPitch, \amp, ~tom_seq_amp
 	)
 );
+
+
 
 
 ////-----START-STOP BUTTON
@@ -1161,14 +1177,14 @@ OSCdef(\startStop,{
 	msg[1].postln;
 	switch(msg[1],
 		1, {
-			Pdef(\bdpat).play(quant:60/~bpm * 4);
-			Pdef(\hhpat).play(quant:60/~bpm * 4);
-			Pdef(\snpat).play(quant:60/~bpm * 4);
-			Pdef(\cbpat).play(quant:60/~bpm * 4);
-			Pdef(\kcpat).play(quant:60/~bpm * 4);
-			Pdef(\fmpat).play(quant:60/~bpm * 4);
-			Pdef(\cepat).play(quant:60/~bpm * 4);
-			Pdef(\tompat).play(quant:60/~bpm * 4);
+			Pdef(\bdpat).play(quant:60/~bpmValue * 4);
+			Pdef(\hhpat).play(quant:60/~bpmValue * 4);
+			Pdef(\snpat).play(quant:60/~bpmValue * 4);
+			Pdef(\cbpat).play(quant:60/~bpmValue * 4);
+			Pdef(\kcpat).play(quant:60/~bpmValue * 4);
+			Pdef(\fmpat).play(quant:60/~bpmValue * 4);
+			Pdef(\cepat).play(quant:60/~bpmValue * 4);
+			Pdef(\tompat).play(quant:60/~bpmValue * 4);
 		},
 		0, {
 			Pdef(\bdpat).stop;
@@ -1188,4 +1204,3 @@ OSCdef(\startStop,{
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
