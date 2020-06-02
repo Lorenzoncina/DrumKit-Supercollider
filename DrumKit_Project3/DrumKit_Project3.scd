@@ -666,17 +666,30 @@ w = Window.new(name: "Drum parts mapping", bounds:Rect(100,500,400,100)).front;
 
 ////////// ---- MANUALLY MAPPING A MIDI INSTRUMENT ---- /////////////
 (
-~notes[36] = "bd";
-~notes[37] = "hh";
-~notes[38] = "sn";
-~notes[39] = "cb";
-~notes[40] = "kc";
-~notes[41] = "fm";
-~notes[42] = "ce";
-~notes[43] = "tom";
+~notes[44] = "bd";
+~notes[45] = "hh";
+~notes[46] = "sn";
+~notes[47] = "cb";
+~notes[48] = "kc";
+~notes[49] = "fm";
+~notes[50] = "ce";
+~notes[51] = "tom";
  MIDIdef.noteOn(\noteOn, {
 	arg vel, noteNumber, chan, src;
-	Synth.new(~notes[noteNumber], [\amp, vel.linexp(1, 127, 0.01, 0.3)]);
+
+
+y = case
+	{ noteNumber == 44 }   { Synth.new(~notes[noteNumber], [\l1, ~l1_temp, \start, ~start_temp]); }
+	{ noteNumber == 45 } { Synth.new(~notes[noteNumber], [\q, ~q_temp, \ffreq, ~ffreq_hh_temp]); }
+	{ noteNumber == 46 } { Synth.new(~notes[noteNumber], [\sinfreq, ~sinfreq_temp,\ffreq, ~ffreq_sn_temp, \amp, ~amp_sn_temp]); }
+	{ noteNumber == 47 } { Synth.new(~notes[noteNumber], [\fund_freq, ~fundfreq_temp, \amp, ~amp_cb_temp]); }
+	{ noteNumber == 48 }   { Synth.new(~notes[noteNumber], [\start, ~start_temp, \amp, ~amp_kc_temp]); }
+	{ noteNumber == 49 }   { Synth.new(~notes[noteNumber], [\fc, ~fc_temp, \amp, ~amp_fm_temp]); }
+	{ noteNumber == 50 }   { Synth.new(~notes[noteNumber], [\value, ~value_temp, \amp, ~amp_clap_e_temp]); }
+	{ noteNumber == 51 }   { Synth.new(~notes[noteNumber], [\pitchRel, ~pitchRel_temp,\startPitch, ~startPitch_temp, \amp, ~amp_tom_temp]); };
+
+	postln(y);
+
 });
 )
 
