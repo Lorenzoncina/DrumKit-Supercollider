@@ -345,7 +345,7 @@ MainComponent::MainComponent() : seqPanel(getLookAndFeel().findColour(ResizableW
 	bassDrumLabel.setFont(Font(12));
 
 	addAndMakeVisible(hitHatLabel);
-	hitHatLabel.setText("hitHat", dontSendNotification);
+	hitHatLabel.setText("Hihat", dontSendNotification);
 	hitHatLabel.setFont(Font(12));
 
 	addAndMakeVisible(snareLabel);
@@ -353,7 +353,7 @@ MainComponent::MainComponent() : seqPanel(getLookAndFeel().findColour(ResizableW
 	snareLabel.setFont(Font(12));
 
 	addAndMakeVisible(cowbleLabel);
-	cowbleLabel.setText("Cowble", dontSendNotification);
+	cowbleLabel.setText("Cowbell", dontSendNotification);
 	cowbleLabel.setFont(Font(12));
 
 	addAndMakeVisible(kickLabel);
@@ -515,7 +515,7 @@ void MainComponent::resized()
 
 	
 	bassDrumLabel.setBounds(118, 5, 60, 15);
-	hitHatLabel.setBounds(187, 5, 60, 15);
+	hitHatLabel.setBounds(190, 5, 60, 15);
 	snareLabel.setBounds(245, 5, 60, 15);
 	cowbleLabel.setBounds(303, 5, 60, 15);
 	kickLabel.setBounds(373, 5, 60, 15);
