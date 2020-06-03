@@ -17,6 +17,6 @@ The DrumKit application design was based on classic analog drum machines, like t
 ![System Diagram](docs/images/DrumKitGUI.png)
 
 ## Demo
-A demo video is available on YouTube.
+A demo video is available on [YouTube](https://youtu.be/CN5pVXBAqJA).
 
 [![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/CN5pVXBAqJA/0.jpg)](http://www.youtube.com/watch?v=CN5pVXBAqJA)
