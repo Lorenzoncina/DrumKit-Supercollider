@@ -17,7 +17,7 @@ The DrumKit application design was based on classic analog drum machines, like t
 ![System Diagram](docs/images/DrumKitGUI.png)
 
 #### WATCH OUT 
-If you are not able to play the sounds as soon as you run the code for the first time, you need to touch all the knobs relative to that sounds to properly hear it.
+If you are not able to play the sounds as soon as you run the code for the first time, you need to touch all the knobs relative to that sounds to properly hear them.
 
 ## Demo
 A demo video is available on [YouTube](https://youtu.be/CN5pVXBAqJA).
